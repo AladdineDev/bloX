@@ -1,4 +1,4 @@
-import 'package:blox/features/tweet/views/tweet_list_screen.dart';
+import 'package:blox/core/router/router.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -6,10 +6,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp.router(
+      routerConfig: AppRouter().router,
       debugShowCheckedModeBanner: false,
       title: "BloX",
-      home: TweetListScreen(),
     );
   }
 }
