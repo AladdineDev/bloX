@@ -8,7 +8,7 @@ class TextDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Expanded(
+        const Expanded(
           child: Divider(
             color: Colors.grey,
             thickness: 1,
@@ -18,10 +18,10 @@ class TextDivider extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
             text,
-            style: TextStyle(color: Colors.grey),
+            style: const TextStyle(color: Colors.grey),
           ),
         ),
-        Expanded(
+        const Expanded(
           child: Divider(
             color: Colors.grey,
             thickness: 1,
