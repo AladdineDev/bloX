@@ -1,3 +1,5 @@
+import 'package:blox/core/common/widgets/my_app_bar.dart';
+import 'package:blox/core/common/widgets/my_drawer.dart';
 import 'package:flutter/material.dart';
 
 class TweetListScreen extends StatelessWidget {
@@ -6,6 +8,8 @@ class TweetListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      appBar: MyAppBar(),
+      drawer: MyDrawer(),
       body: Center(
         child: Text("TweetListScreen"),
       ),

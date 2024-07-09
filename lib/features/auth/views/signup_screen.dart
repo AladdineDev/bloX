@@ -1,4 +1,4 @@
-import 'package:blox/core/common/widgets/utton.dart';
+import 'package:blox/core/common/widgets/button.dart';
 import 'package:blox/core/common/widgets/divider.dart';
 import 'package:blox/features/auth/widgets/x_header.dart';
 import 'package:flutter/gestures.dart';
