@@ -11,25 +11,28 @@ class MyApp extends StatelessWidget {
       title: "BloX",
       routerConfig: AppRouter().router,
       darkTheme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: Colors.black,
         textTheme: const TextTheme(
           displaySmall: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 36,
             fontWeight: FontWeight.bold,
           ),
           bodyMedium: TextStyle(
             fontSize: 14,
-            color: Colors.black,
+            color: Colors.white,
           ),
           bodyLarge: TextStyle(
             fontSize: 18,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+        colorScheme: ColorScheme.fromSeed(
+          dynamicSchemeVariant: DynamicSchemeVariant.content,
+          seedColor: Colors.white,
+        ),
       ),
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.dark,
     );
   }
 }
