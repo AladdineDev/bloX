@@ -1,17 +1,40 @@
-# blox
+# Blox
 
-A new Flutter project.
+[![Flutter 3](https://img.shields.io/badge/Flutter-3.22-02569b.svg?style=flat-square&logo=flutter&logoColor=13b9fd)](https://flutter.dev/)
+[![Dart 3](https://img.shields.io/badge/Dart-3.4-0175c2.svg?style=flat-square&logo=dart&logoColor=13b9fd)](https://dart.dev/)
+[![Firebase](https://img.shields.io/badge/Firebase--ffcc30.svg?style=flat-square&logo=firebase&logoColor=ffcc30)](https://firebase.google.com/)
 
-## Getting Started
+## Getting started 🚀
 
-This project is a starting point for a Flutter application.
+If you haven't already, install [Flutter](https://docs.flutter.dev/get-started/install)
 
-A few resources to get you started if this is your first Flutter project:
+**1. Clone this repository**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+git clone https://github.com/AladdineDev/blox
+cd blox
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# bloX
+**2. Install dependencies:**
+
+```bash
+flutter pub get
+```
+
+**3. Run the code generator:**
+
+```bash
+dart run build_runner build -d
+```
+
+> For additional information, refer to the [build_runner](https://pub.dev/packages/build_runner) documentation
+
+**4. Run the app:**
+
+```bash
+flutter run
+```
+
+## License 📄
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/AladdineDev/blox/blob/main/LICENSE.md) file for details
