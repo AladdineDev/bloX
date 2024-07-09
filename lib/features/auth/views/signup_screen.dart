@@ -22,7 +22,7 @@ class SignupScreen extends StatelessWidget {
               Text(
                 "See what's happening in the world now.",
                 // display medium
-                style: Theme.of(context).textTheme.displayMedium,
+                style: Theme.of(context).textTheme.displaySmall,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,39 +50,26 @@ class SignupScreen extends StatelessWidget {
                           text: 'Terms',
                           style: const TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Handle Terms tap here
-                            },
+                            ..onTap = _onTermsTap,
                         ),
                         const TextSpan(text: ', '),
                         TextSpan(
                           text: 'Privacy Policy',
                           style: const TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Handle Privacy Policy tap here
-                            },
+                            ..onTap = _onPrivacyPolicyTap,
                         ),
                         const TextSpan(text: ', and '),
                         TextSpan(
                           text: 'Cookie Use',
                           style: const TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Handle Cookie Use tap here
-                            },
+                            ..onTap = _onCookieUseTap,
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 24),
-                  // Text(
-                  //   "Have an account already? Log in",
-                  //   style: Theme.of(context)
-                  //       .textTheme
-                  //       .bodyLarge
-                  //       ?.copyWith(color: Colors.grey),
-                  // )
                   RichText(
                     text: TextSpan(
                       style: Theme.of(context)
@@ -111,20 +98,11 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
-  void _onTermsTap() {
+  void _onTermsTap() {}
 
-  }
+  void _onPrivacyPolicyTap() {}
 
-  void _onPrivacyPolicyTap() {
+  void _onCookieUseTap() {}
 
-  }
-
-  void _onCookieUseTap() {
-
-  }
-
-  void _onLoginTap() {
-
-  }
-
+  void _onLoginTap() {}
 }
