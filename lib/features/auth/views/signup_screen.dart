@@ -1,8 +1,6 @@
-import 'dart:ui';
-
+import 'package:blox/core/common/widgets/button.dart';
+import 'package:blox/core/common/widgets/divider.dart';
 import 'package:blox/features/auth/widgets/x_header.dart';
-import 'package:blox/widgets/Button.dart';
-import 'package:blox/widgets/Divider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -34,14 +32,14 @@ class SignupScreen extends StatelessWidget {
                       height: 20,
                     ),
                   ),
-                  TextDivider("or"),
-                  Button("Create account"),
+                  const TextDivider("or"),
+                  const Button("Create account"),
                   const SizedBox(height: 24),
                   RichText(
                     text: TextSpan(
                       style: Theme.of(context)
                           .textTheme
-                          .bodyMedium
+                          .titleSmall
                           ?.copyWith(color: Colors.grey),
                       children: <TextSpan>[
                         const TextSpan(

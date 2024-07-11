@@ -1,4 +1,5 @@
 import 'package:blox/core/router/router.dart';
+import 'package:blox/core/theme/theme.dart' as theme;
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -10,25 +11,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "BloX",
       routerConfig: AppRouter().router,
-      darkTheme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        textTheme: const TextTheme(
-          displaySmall: TextStyle(
-            color: Colors.black,
-            fontSize: 36,
-            fontWeight: FontWeight.bold,
-          ),
-          bodyMedium: TextStyle(
-            fontSize: 14,
-            color: Colors.black,
-          ),
-          bodyLarge: TextStyle(
-            fontSize: 18,
-            color: Colors.black,
-          ),
-        ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-      ),
+      theme: theme.lightTheme,
+      darkTheme: theme.darkTheme,
       themeMode: ThemeMode.light,
     );
   }
