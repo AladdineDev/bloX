@@ -1,5 +1,6 @@
 import 'package:blox/features/auth/views/signup_screen.dart';
 import 'package:blox/features/tweet/views/tweet_list_screen.dart';
+import 'package:blox/features/webview/views/webview_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -35,5 +36,18 @@ class SignupScreenRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const SignupScreen();
+  }
+}
+
+@TypedGoRoute<WebviewScreenRoute>(path: '/webview:uri')
+@immutable
+class WebviewScreenRoute extends GoRouteData {
+  final Uri uri;
+
+  const WebviewScreenRoute({required this.uri});
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return WebViewScreen(uri: uri);
   }
 }

@@ -1,10 +1,12 @@
 import 'dart:ui';
 
+import 'package:blox/core/router/router.dart';
 import 'package:blox/features/auth/widgets/x_header.dart';
 import 'package:blox/widgets/Button.dart';
 import 'package:blox/widgets/Divider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
@@ -50,21 +52,35 @@ class SignupScreen extends StatelessWidget {
                           text: 'Terms',
                           style: const TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = _onTermsTap,
+                            ..onTap = () {
+                              WebviewScreenRoute(
+                                      uri: Uri.parse('https://x.com/fr/tos'))
+                                  .push(context);
+                            },
                         ),
                         const TextSpan(text: ', '),
                         TextSpan(
                           text: 'Privacy Policy',
                           style: const TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = _onPrivacyPolicyTap,
+                            ..onTap = () {
+                              WebviewScreenRoute(
+                                      uri:
+                                          Uri.parse('https://x.com/fr/privacy'))
+                                  .push(context);
+                            },
                         ),
                         const TextSpan(text: ', and '),
                         TextSpan(
                           text: 'Cookie Use',
                           style: const TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = _onCookieUseTap,
+                            ..onTap = () {
+                              WebviewScreenRoute(
+                                uri: Uri.parse(
+                                    'https://help.x.com/fr/rules-and-policies/x-cookies'),
+                              ).push(context);
+                            },
                         ),
                       ],
                     ),
@@ -97,12 +113,6 @@ class SignupScreen extends StatelessWidget {
       ),
     );
   }
-
-  void _onTermsTap() {}
-
-  void _onPrivacyPolicyTap() {}
-
-  void _onCookieUseTap() {}
 
   void _onLoginTap() {}
 }
