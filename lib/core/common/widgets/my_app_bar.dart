@@ -2,7 +2,9 @@ import 'package:blox/core/common/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MyAppBar({super.key});
+  const MyAppBar({super.key, this.bottom});
+
+  final PreferredSizeWidget? bottom;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -27,6 +29,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: const Icon(Icons.settings_outlined),
         ),
       ],
+      bottom: bottom,
     );
   }
 }
