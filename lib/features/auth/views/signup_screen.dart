@@ -39,7 +39,7 @@ class SignupScreen extends StatelessWidget {
                     text: TextSpan(
                       style: Theme.of(context)
                           .textTheme
-                          .bodyMedium
+                          .titleSmall
                           ?.copyWith(color: Colors.grey),
                       children: <TextSpan>[
                         const TextSpan(

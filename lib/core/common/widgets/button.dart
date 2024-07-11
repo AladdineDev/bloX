@@ -28,7 +28,7 @@ class Button extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(text,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       color: Colors.black, fontWeight: FontWeight.w700)),
             ),
             trailing,
