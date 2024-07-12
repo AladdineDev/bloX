@@ -5,28 +5,24 @@ class ProfilePicture extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.image,
-    this.size = const Size.square(48),
+    this.dimension = 28,
   });
 
   final VoidCallback onPressed;
   final ImageProvider image;
-  final Size size;
+  final double dimension;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onPressed,
-      icon: const ClipOval(
+      icon: ClipOval(
         child: Image(
-          image: NetworkImage(
-            "https://abs.twimg.com/sticky/default_profile_images/default_profile.png",
-          ),
+          image: image,
           fit: BoxFit.cover,
+          width: dimension,
+          height: dimension,
         ),
-      ),
-      style: IconButton.styleFrom(
-        padding: const EdgeInsets.all(6),
-        fixedSize: size,
       ),
     );
   }
