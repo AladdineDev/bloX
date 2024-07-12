@@ -1,3 +1,4 @@
+import 'package:blox/features/auth/views/login_screen.dart';
 import 'package:blox/features/auth/views/signup_screen.dart';
 import 'package:blox/features/tweet/views/tweet_list_screen.dart';
 import 'package:blox/features/webview/views/webview_screen.dart';
@@ -36,6 +37,19 @@ class SignupScreenRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const SignupScreen();
+  }
+}
+
+@TypedGoRoute<LoginScreenRoute>(path: '/login')
+@immutable
+class LoginScreenRoute extends GoRouteData {
+  final LoginStep step;
+
+  const LoginScreenRoute({this.step = LoginStep.login});
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return LoginScreen(step: step);
   }
 }
 

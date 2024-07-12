@@ -99,7 +99,7 @@ class SignupScreen extends StatelessWidget {
                           style: const TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              // Handle Log in tap here
+                              context.push('/login');
                             },
                         ),
                       ],
@@ -113,6 +113,4 @@ class SignupScreen extends StatelessWidget {
       ),
     );
   }
-
-  void _onLoginTap() {}
 }
