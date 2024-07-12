@@ -21,15 +21,11 @@ class TweetListScreen extends StatelessWidget {
                   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                     context,
                   ),
-                  sliver: SliverPersistentHeader(
-                    delegate: MySliverAppBarDelegate(
-                      child: MySliverAppBar(
-                        bottom: TweetListTabBar(
-                          tabs: TweetListTabs.values.map((tab) {
-                            return tab.title;
-                          }).toList(),
-                        ),
-                      ),
+                  sliver: MySliverAppBar(
+                    bottom: TweetListTabBar(
+                      tabs: TweetListTabs.values.map((tab) {
+                        return tab.title;
+                      }).toList(),
                     ),
                   ),
                 ),
