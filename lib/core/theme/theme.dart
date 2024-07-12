@@ -75,7 +75,7 @@ final darkTheme = ThemeData.dark().copyWith(
     color: Colors.black,
   ),
   tabBarTheme: TabBarTheme(
-    labelPadding: const EdgeInsets.only(bottom: 8),
+    labelPadding: const EdgeInsets.symmetric(vertical: 8),
     dividerColor: const Color(0xff7c838b),
     indicatorSize: TabBarIndicatorSize.tab,
     indicator: UnderlineTabIndicator(

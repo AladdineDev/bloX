@@ -9,6 +9,8 @@ class MySliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      floating: true,
+      snap: true,
       centerTitle: true,
       leading: ProfilePicture(
         image: const NetworkImage(

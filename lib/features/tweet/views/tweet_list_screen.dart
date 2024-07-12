@@ -15,6 +15,7 @@ class TweetListScreen extends StatelessWidget {
         drawer: const MyDrawer(),
         body: SafeArea(
           child: NestedScrollView(
+            floatHeaderSlivers: true,
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return <Widget>[
                 SliverOverlapAbsorber(
