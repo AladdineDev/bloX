@@ -21,6 +21,7 @@ class AppRouter {
   );
 }
 
+
 @TypedGoRoute<SignupScreenRoute>(path: '/sign-up')
 @immutable
 class SignupScreenRoute extends GoRouteData {
@@ -38,6 +39,7 @@ class TweetListScreenRoute extends GoRouteData {
     return const TweetListScreen();
   }
 }
+
 
 @TypedGoRoute<ProfileScreenRoute>(path: '/profile')
 @immutable
