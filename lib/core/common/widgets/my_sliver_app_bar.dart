@@ -22,12 +22,6 @@ class MySliverAppBar extends StatelessWidget {
         "assets/images/x.png",
         width: 28,
       ),
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.settings_outlined),
-        ),
-      ],
       bottom: bottom,
     );
   }
