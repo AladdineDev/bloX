@@ -4,6 +4,8 @@ final darkTheme = ThemeData.dark().copyWith(
   colorScheme: const ColorScheme.dark(
     primary: Color(0xff1d9bf0),
     surface: Colors.black,
+    onSurface: Color(0xffd7d7d7),
+    onSurfaceVariant: Colors.white,
   ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
@@ -99,5 +101,17 @@ final darkTheme = ThemeData.dark().copyWith(
   dividerTheme: const DividerThemeData(
     color: Color(0xff7c838b),
     thickness: 0.5,
+  ),
+  listTileTheme: const ListTileThemeData(
+    contentPadding: EdgeInsets.symmetric(horizontal: 20),
+    minTileHeight: 48,
+    titleTextStyle: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+  expansionTileTheme: const ExpansionTileThemeData(
+    textColor: Colors.white,
+    shape: Border(),
   ),
 );
