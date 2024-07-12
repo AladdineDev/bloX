@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../widgets/header.dart';
 import '../widgets/profile_info.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,8 @@ class ProfilePage extends StatelessWidget {
           children: [
             ProfileHeader(),
             SizedBox(height: 30),
-            ProfileInfo(name: 'AladdineDev', handle: '@voilà', bio: 'blablablabla'),
+            ProfileInfo(
+                name: 'AladdineDev', handle: '@voilà', bio: 'blablablabla'),
             TabBar(
               tabs: [
                 Tab(text: 'About'),

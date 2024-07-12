@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "284801421562",
+    "project_id": "esgi-tweet-4339f",
+    "storage_bucket": "esgi-tweet-4339f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284801421562:android:070306f4d916f870f87943",
+        "android_client_info": {
+          "package_name": "com.example.blox"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzfE0ZUNyykhbvGAmSyP5rbXSjAcElWps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
