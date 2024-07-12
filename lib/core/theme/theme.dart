@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 final darkTheme = ThemeData.dark().copyWith(
-  colorScheme: const ColorScheme.dark(),
+  colorScheme: const ColorScheme.dark(
+    primary: Color(0xff1d9bf0),
+    surface: Colors.black,
+  ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
       color: Colors.white,
@@ -71,10 +74,30 @@ final darkTheme = ThemeData.dark().copyWith(
   appBarTheme: const AppBarTheme(
     color: Colors.black,
   ),
-  tabBarTheme: const TabBarTheme(
-    labelStyle: TextStyle(
-      fontSize: 10,
-      color: Colors.white,
+  tabBarTheme: TabBarTheme(
+    labelPadding: const EdgeInsets.only(bottom: 8),
+    dividerColor: const Color(0xff7c838b),
+    indicatorSize: TabBarIndicatorSize.tab,
+    indicator: UnderlineTabIndicator(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: const BorderSide(
+        style: BorderStyle.solid,
+        color: Color(0xff1d9bf0),
+        width: 3,
+      ),
+      insets: const EdgeInsets.only(left: 10, right: 10, bottom: 1),
     ),
+    labelStyle: const TextStyle(
+      fontSize: 14,
+    ),
+    labelColor: const Color(0xffd7d7d7),
+    unselectedLabelStyle: const TextStyle(
+      fontSize: 14,
+    ),
+    unselectedLabelColor: const Color(0xff7c838b),
+  ),
+  dividerTheme: const DividerThemeData(
+    color: Color(0xff7c838b),
+    thickness: 0.5,
   ),
 );
