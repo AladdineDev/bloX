@@ -115,4 +115,9 @@ final darkTheme = ThemeData.dark().copyWith(
     textColor: Colors.white,
     shape: Border(),
   ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    shape: CircleBorder(),
+    foregroundColor: Colors.white,
+    iconSize: 28,
+  ),
 );

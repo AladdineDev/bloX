@@ -68,6 +68,12 @@ class TweetListScreen extends StatelessWidget {
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(
+            Icons.edit_outlined,
+          ),
+        ),
       ),
     );
   }
