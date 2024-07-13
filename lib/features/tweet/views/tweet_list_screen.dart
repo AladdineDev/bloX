@@ -52,7 +52,11 @@ class TweetListScreen extends StatelessWidget {
                           sliver: SliverList.separated(
                             itemCount: 50,
                             itemBuilder: (context, index) {
-                              return const Tweet();
+                              return Tweet(
+                                onTap: () {
+                                  //TODO: implement this method
+                                },
+                              );
                             },
                             separatorBuilder: (context, index) {
                               return const Divider();

@@ -101,6 +101,7 @@ final darkTheme = ThemeData.dark().copyWith(
   dividerTheme: const DividerThemeData(
     color: Color(0xff7c838b),
     thickness: 0.5,
+    space: 0,
   ),
   listTileTheme: const ListTileThemeData(
     contentPadding: EdgeInsets.symmetric(horizontal: 20),
