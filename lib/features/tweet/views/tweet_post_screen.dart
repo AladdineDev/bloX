@@ -94,12 +94,7 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
                   },
                   icon: const Icon(Icons.image_outlined),
                 ),
-                TweetPostLengthIndicator(
-                  textEditingController: _postController,
-                  maxLength: TweetPostScreen.postMaxLength,
-                  maxLengthBeforeWarning:
-                      TweetPostScreen.postMaxLengthBeforeWarning,
-                ),
+                TweetPostLengthIndicator(postController: _postController),
               ],
             )
           ],

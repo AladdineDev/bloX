@@ -6,18 +6,14 @@ import 'package:flutter/material.dart';
 class TweetPostLengthIndicator extends StatelessWidget {
   const TweetPostLengthIndicator({
     super.key,
-    required this.textEditingController,
-    required this.maxLength,
-    required this.maxLengthBeforeWarning,
+    required this.postController,
   });
 
-  final TextEditingController textEditingController;
-  final int maxLength;
-  final int maxLengthBeforeWarning;
+  final TextEditingController postController;
 
   @override
   Widget build(BuildContext context) {
-    final counter = maxLength - textEditingController.text.length;
+    final counter = TweetPostScreen.postMaxLength - postController.text.length;
     final hideSpinner = counter <= -10;
     return IconButton(
       onPressed: null,
@@ -32,12 +28,14 @@ class TweetPostLengthIndicator extends StatelessWidget {
   }
 
   Widget _getSpinner(BuildContext context) {
-    switch (textEditingController.text.length) {
+    final spinnerValue =
+        postController.text.length / TweetPostScreen.postMaxLength;
+    switch (postController.text.length) {
       case >= TweetPostScreen.postMaxLength:
         return Spinner.small(
           dimension: 28,
           strokeWidth: 3,
-          value: textEditingController.text.length / maxLength,
+          value: spinnerValue,
           color: context.colorScheme.error,
           backgroundColor: context.colorScheme.onSurface,
         );
@@ -45,14 +43,14 @@ class TweetPostLengthIndicator extends StatelessWidget {
         return Spinner.small(
           dimension: 28,
           strokeWidth: 3,
-          value: textEditingController.text.length / maxLength,
+          value: spinnerValue,
           color: context.colorScheme.errorContainer,
           backgroundColor: context.colorScheme.onSurface,
         );
       default:
         return Spinner.small(
           dimension: 24,
-          value: textEditingController.text.length / maxLength,
+          value: spinnerValue,
           color: context.colorScheme.primary,
           backgroundColor: context.colorScheme.onSurface,
         );
@@ -63,7 +61,7 @@ class TweetPostLengthIndicator extends StatelessWidget {
     BuildContext context, {
     required int counter,
   }) {
-    switch (textEditingController.text.length) {
+    switch (postController.text.length) {
       case >= TweetPostScreen.postMaxLength:
         return Text(
           '$counter',
