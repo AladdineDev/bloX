@@ -75,6 +75,7 @@ final darkTheme = ThemeData.dark().copyWith(
   scaffoldBackgroundColor: Colors.black,
   appBarTheme: const AppBarTheme(
     color: Colors.black,
+    foregroundColor: Colors.white,
   ),
   tabBarTheme: TabBarTheme(
     labelPadding: const EdgeInsets.symmetric(vertical: 8),
@@ -119,5 +120,16 @@ final darkTheme = ThemeData.dark().copyWith(
     shape: CircleBorder(),
     foregroundColor: Colors.white,
     iconSize: 28,
+  ),
+  filledButtonTheme: FilledButtonThemeData(
+    style: FilledButton.styleFrom(
+      foregroundColor: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      minimumSize: const Size(64, 32),
+      textStyle: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
   ),
 );
