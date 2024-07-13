@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TweetCreationScreen extends StatelessWidget {
-  const TweetCreationScreen({super.key});
+class TweetPostScreen extends StatelessWidget {
+  const TweetPostScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class TweetCreationScreen extends StatelessWidget {
         ],
       ),
       body: const Center(
-        child: Text("TweetCreationScreen"),
+        child: Text("TweetPostScreen"),
       ),
     );
   }

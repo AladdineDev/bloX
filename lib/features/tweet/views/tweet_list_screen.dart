@@ -80,6 +80,6 @@ class TweetListScreen extends StatelessWidget {
   }
 
   void _onFloationgActionButtonPressed(BuildContext context) {
-    TweetCreationScreenRoute().push(context);
+    TweetPostScreenRoute().push(context);
   }
 }
