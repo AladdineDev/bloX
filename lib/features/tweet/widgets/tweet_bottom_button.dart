@@ -18,6 +18,7 @@ class TweetBottomButton extends StatelessWidget {
     final number = this.number;
     final color = context.colorScheme.onSurface;
     return InkWell(
+      borderRadius: BorderRadius.circular(4),
       onTap: onTap,
       child: Row(
         children: [
