@@ -104,10 +104,8 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
   }
 
   void _onPostFieldChanged(String value) {
-    if (value.isEmpty || value.trim() == '') {
-      setState(() => enablePostButton = false);
-    } else {
-      setState(() => enablePostButton = true);
-    }
+    setState(() {
+      enablePostButton = value.trim().isNotEmpty;
+    });
   }
 }
