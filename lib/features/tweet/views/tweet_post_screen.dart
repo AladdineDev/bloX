@@ -1,10 +1,14 @@
 import 'package:blox/core/common/widgets/profile_picture.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
+import 'package:blox/features/tweet/widgets/tweet_post_length_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class TweetPostScreen extends StatefulWidget {
   const TweetPostScreen({super.key});
+
+  static const postMaxLength = 280;
+  static const postMaxLengthBeforeWarning = 260;
 
   @override
   State<TweetPostScreen> createState() => _TweetPostScreenState();
@@ -12,7 +16,6 @@ class TweetPostScreen extends StatefulWidget {
 
 class _TweetPostScreenState extends State<TweetPostScreen> {
   final _postController = TextEditingController();
-  static const _postMaxLength = 280;
   bool enablePostButton = false;
 
   @override
@@ -80,20 +83,22 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
                 ),
               ),
             ),
+            const Divider(),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
                   color: context.colorScheme.primary,
-                  onPressed: () {},
+                  onPressed: () {
+                    //TODO: implement this method
+                  },
                   icon: const Icon(Icons.image_outlined),
                 ),
-                Row(
-                  children: [
-                    CircularProgressIndicator(
-                      value: _postController.text.length / _postMaxLength,
-                      backgroundColor: context.colorScheme.onSurface,
-                    )
-                  ],
+                TweetPostLengthIndicator(
+                  textEditingController: _postController,
+                  maxLength: TweetPostScreen.postMaxLength,
+                  maxLengthBeforeWarning:
+                      TweetPostScreen.postMaxLengthBeforeWarning,
                 ),
               ],
             )
