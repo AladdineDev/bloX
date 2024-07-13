@@ -4,8 +4,11 @@ final darkTheme = ThemeData.dark().copyWith(
   colorScheme: const ColorScheme.dark(
     primary: Color(0xff1d9bf0),
     surface: Colors.black,
+    onPrimary: Colors.white,
     onSurface: Color(0xff7c838b),
     onSurfaceVariant: Colors.white,
+    error: Color(0xfff4222f),
+    errorContainer: Color(0xffffd401),
   ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
@@ -118,12 +121,10 @@ final darkTheme = ThemeData.dark().copyWith(
   ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     shape: CircleBorder(),
-    foregroundColor: Colors.white,
     iconSize: 28,
   ),
   filledButtonTheme: FilledButtonThemeData(
     style: FilledButton.styleFrom(
-      foregroundColor: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       minimumSize: const Size(64, 32),
       textStyle: const TextStyle(
