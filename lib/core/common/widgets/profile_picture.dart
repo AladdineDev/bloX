@@ -34,6 +34,12 @@ class ProfilePicture extends StatelessWidget {
           child: ClipOval(
             child: Image(
               image: image,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(
+                  Icons.account_circle_outlined,
+                  size: dimension,
+                );
+              },
               fit: BoxFit.cover,
               width: dimension,
               height: dimension,
