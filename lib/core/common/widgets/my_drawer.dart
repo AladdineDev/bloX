@@ -24,8 +24,7 @@ class MyDrawer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ProfilePicture(
-                      dimension: 36,
+                    ProfilePicture.medium(
                       image: const NetworkImage(
                         "https://abs.twimg.com/sticky/default_profile_images/default_profile.png",
                       ),
@@ -33,7 +32,7 @@ class MyDrawer extends StatelessWidget {
                         //TODO: implement this function
                       },
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 12),
                     DrawerProfileNameAndUsername(
                       onTap: () {
                         //TODO: implement this function

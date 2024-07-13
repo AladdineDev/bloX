@@ -12,7 +12,7 @@ class MySliverAppBar extends StatelessWidget {
       floating: true,
       snap: true,
       centerTitle: true,
-      leading: ProfilePicture(
+      leading: ProfilePicture.small(
         image: const NetworkImage(
           "https://abs.twimg.com/sticky/default_profile_images/default_profile.png",
         ),

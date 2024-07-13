@@ -1,5 +1,6 @@
 import 'package:blox/core/common/widgets/my_sliver_app_bar.dart';
 import 'package:blox/core/common/widgets/my_drawer.dart';
+import 'package:blox/features/tweet/widgets/tweet.dart';
 import 'package:blox/features/tweet/widgets/tweet_list_tab_bar.dart';
 import 'package:blox/features/tweet/widgets/tweet_list_tabs.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class TweetListScreen extends StatelessWidget {
                           sliver: SliverList.separated(
                             itemCount: 50,
                             itemBuilder: (context, index) {
-                              return Text('${tab.name}: Item $index');
+                              return const Tweet();
                             },
                             separatorBuilder: (context, index) {
                               return const Divider();

@@ -4,7 +4,7 @@ final darkTheme = ThemeData.dark().copyWith(
   colorScheme: const ColorScheme.dark(
     primary: Color(0xff1d9bf0),
     surface: Colors.black,
-    onSurface: Color(0xffd7d7d7),
+    onSurface: Color(0xff7c838b),
     onSurfaceVariant: Colors.white,
   ),
   textTheme: const TextTheme(
