@@ -40,9 +40,9 @@ class ProfileInfo extends StatelessWidget {
   Widget _buildFollowInfo() {
     return const Row(
       children:  [
-        Text('1200 Followers', style: TextStyle(fontWeight: FontWeight.bold)),
-        SizedBox(width: 10),
         Text('500 Following', style: TextStyle(fontWeight: FontWeight.bold)),
+        SizedBox(width: 10),
+        Text('1200 Followers', style: TextStyle(fontWeight: FontWeight.bold)),
       ],
     );
   }

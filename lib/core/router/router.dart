@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:blox/features/auth/views/login_screen.dart';
 import 'package:blox/features/profil/views/profil_screen.dart';
 import 'package:blox/features/webview/views/webview_screen.dart';
+import 'package:blox/features/edite_profile/views/edite_profile_screen.dart';
 
 part 'router.g.dart';
 
@@ -20,7 +21,7 @@ class AppRouter {
 
   final router = GoRouter(
     routes: $appRoutes,
-    initialLocation: '/sign-up',
+    initialLocation: '/profile',
   );
 }
 
@@ -48,6 +49,15 @@ class ProfileScreenRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const ProfileScreen();
+  }
+}
+
+@TypedGoRoute<EditeProfileScreenRoute>(path: '/edite-profile')
+@immutable
+class EditeProfileScreenRoute extends GoRouteData{
+  @override
+  Widget build(BuildContext context, GoRouterState state){
+    return  const EditeProfileScreen() ;
   }
 }
 
