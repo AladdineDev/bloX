@@ -5,6 +5,7 @@ class Button extends StatelessWidget {
   final ButtonStyle style;
   final Widget leading;
   final Widget trailing;
+  final void Function() onPressed;
 
   const Button(
     this.text, {
@@ -12,6 +13,7 @@ class Button extends StatelessWidget {
     this.style = const ButtonStyle(),
     this.leading = const SizedBox(width: 0),
     this.trailing = const SizedBox(width: 0),
+    required this.onPressed,
   });
 
   @override
@@ -20,7 +22,7 @@ class Button extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         style: style,
-        onPressed: () {},
+        onPressed: onPressed,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

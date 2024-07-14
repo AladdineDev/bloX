@@ -1,115 +1,162 @@
-import 'package:blox/core/common/widgets/button.dart';
-import 'package:blox/core/common/widgets/divider.dart';
+import 'package:blox/core/common/widgets/input.dart';
 import 'package:blox/core/router/router.dart';
 import 'package:blox/features/auth/widgets/x_header.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:'
+import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 
-class SignupScreen extends StatelessWidget {
-  const SignupScreen({super.key});
+enum SignupStep { form, otp, profilePicture, username, notifications }
+
+class SignupScreen extends StatefulWidget {
+  final SignupStep step;
+
+  const SignupScreen({super.key, required this.step});
+
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _dateOfBirthController = TextEditingController();
+  final TextEditingController _verificationCodeController =
+      TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+
+  DateTime? _selectedDate;
+  XFile? _profileImage;
+  bool isMainBtnEnabled = false;
+  bool isDatePickerVisible = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => context.pop(),
+        ),
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            XHeader(),
+          ],
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 24, right: 24),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const XHeader(),
               Text(
-                "See what's happening in the world now.",
-                // display medium
-                style: Theme.of(context).textTheme.displaySmall,
+                'Create your account',
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge
+                    ?.copyWith(fontWeight: FontWeight.w600),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(height: 70),
+              Input(
+                controller: _nameController,
+                labelText: "Name",
+                maxLength: 50,
+                keyboardType: TextInputType.name,
+              ),
+              Input(
+                controller: _nameController,
+                labelText: "Email",
+                keyboardType: TextInputType.emailAddress,
+              ),
+              Input(
+                controller: _dateOfBirthController,
+                labelText: "Date of birth",
+                keyboardType: TextInputType.datetime,
+                onTap: () {
+                  if (!isDatePickerVisible) {
+                    setState(() {
+                      isDatePickerVisible = true;
+                    });
+                  }
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 54),
+                child: Text(
+                  "This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.",
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                ),
+              ),
+              const Expanded(child: SizedBox()),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Button(
-                    "Continue with Google",
-                    leading: Image.asset(
-                      './assets/images/google.png',
-                      height: 20,
+                  Visibility(
+                    visible: _isStepSkippable(),
+                    child: OutlinedButton(
+                      onPressed: _skip,
+                      child: Text(
+                        widget.step == SignupStep.notifications
+                            ? 'Done'
+                            : 'Next',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: isMainBtnEnabled
+                                ? Colors.black
+                                : Colors.black54,
+                            fontWeight: FontWeight.w700),
+                      ),
                     ),
                   ),
-                  const TextDivider("or"),
-                  const Button("Create account"),
-                  const SizedBox(height: 24),
-                  RichText(
-                    text: TextSpan(
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.copyWith(color: Colors.grey),
-                      children: <TextSpan>[
-                        const TextSpan(
-                            text: 'By signing up, you agree to our '),
-                        TextSpan(
-                          text: 'Terms',
-                          style: const TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              WebviewScreenRoute(
-                                      uri: Uri.parse('https://x.com/fr/tos'))
-                                  .push(context);
-                            },
-                        ),
-                        const TextSpan(text: ', '),
-                        TextSpan(
-                          text: 'Privacy Policy',
-                          style: const TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              WebviewScreenRoute(
-                                      uri:
-                                          Uri.parse('https://x.com/fr/privacy'))
-                                  .push(context);
-                            },
-                        ),
-                        const TextSpan(text: ', and '),
-                        TextSpan(
-                          text: 'Cookie Use',
-                          style: const TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              WebviewScreenRoute(
-                                uri: Uri.parse(
-                                    'https://help.x.com/fr/rules-and-policies/x-cookies'),
-                              ).push(context);
-                            },
-                        ),
-                      ],
+                  OutlinedButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(
+                          isMainBtnEnabled ? Colors.white : Colors.grey),
+                    ),
+                    onPressed: _onMainBtnPressed,
+                    child: Text(
+                      widget.step == SignupStep.notifications ? 'Done' : 'Next',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color:
+                              isMainBtnEnabled ? Colors.black : Colors.black54,
+                          fontWeight: FontWeight.w700),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  RichText(
-                    text: TextSpan(
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(color: Colors.grey),
-                      children: <TextSpan>[
-                        const TextSpan(text: "Have an account already? "),
-                        TextSpan(
-                          text: "Log in",
-                          style: const TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              context.push('/login');
-                            },
-                        ),
-                      ],
-                    ),
-                  ),
+                  // TODO: display date picker
                 ],
-              )
+              ),
             ],
           ),
         ),
       ),
     );
   }
+
+  void _skip() {
+    SignupScreenRoute(step: _getNextStep()).push(context);
+  }
+
+  SignupStep _getNextStep() {
+    return SignupStep.values[widget.step.index + 1];
+  }
+
+  bool _isStepSkippable() {
+    switch (widget.step) {
+      case SignupStep.form:
+        return false;
+      case SignupStep.otp:
+        return false;
+      case SignupStep.profilePicture:
+        return true;
+      case SignupStep.username:
+        return true;
+      case SignupStep.notifications:
+        return false;
+    }
+  }
+
+  void _onMainBtnPressed() {}
 }

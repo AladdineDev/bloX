@@ -80,6 +80,7 @@ final darkTheme = ThemeData(
   scaffoldBackgroundColor: Colors.black,
   appBarTheme: const AppBarTheme(
     color: Colors.black,
+    foregroundColor: Colors.white,
   ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(

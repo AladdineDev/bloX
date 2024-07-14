@@ -1,4 +1,5 @@
 import 'package:blox/features/auth/views/login_screen.dart';
+import 'package:blox/features/auth/views/onboarding_screen.dart';
 import 'package:blox/features/auth/views/signup_screen.dart';
 import 'package:blox/features/profil/views/profil_screen.dart';
 import 'package:blox/features/tweet/views/tweet_list_screen.dart';
@@ -19,17 +20,30 @@ class AppRouter {
 
   final router = GoRouter(
     routes: $appRoutes,
-    initialLocation: '/sign-up',
+    initialLocation: '/onboarding',
   );
 }
 
 
+@TypedGoRoute<OnboardingScreenRoute>(path: '/onboarding')
+@immutable
+class OnboardingScreenRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const OnBoardingScreen();
+  }
+}
+
 @TypedGoRoute<SignupScreenRoute>(path: '/sign-up')
 @immutable
 class SignupScreenRoute extends GoRouteData {
+  final SignupStep step;
+
+  const SignupScreenRoute({required this.step});
+
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const SignupScreen();
+    return SignupScreen(step: step,);
   }
 }
 
@@ -56,12 +70,13 @@ class ProfileScreenRoute extends GoRouteData {
 @immutable
 class LoginScreenRoute extends GoRouteData {
   final LoginStep step;
+  final String? login;
 
-  const LoginScreenRoute({this.step = LoginStep.login});
+  const LoginScreenRoute({required this.step, this.login});
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return LoginScreen(step: step);
+    return LoginScreen(step: step, login: login);
   }
 }
 
