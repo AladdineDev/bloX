@@ -2,6 +2,8 @@ import 'package:blox/core/router/router.dart';
 import 'package:blox/features/auth/widgets/x_header.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 enum LoginStep {
   login,
@@ -10,8 +12,9 @@ enum LoginStep {
 
 class LoginScreen extends StatefulWidget {
   final LoginStep step;
+  final String? login;
 
-  const LoginScreen({super.key, required this.step});
+  const LoginScreen({super.key, required this.step, this.login});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -21,6 +24,16 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool isMainBtnEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    print('login: ${widget.login}');
+    if (widget.login != null) {
+      _loginController.value =
+          _loginController.value.copyWith(text: widget.login!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +61,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 widget.step == LoginStep.login
                     ? "To get started, first enter your phone, email or @username"
                     : "Enter your password",
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge
+                    ?.copyWith(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 24),
               TextFormField(
@@ -66,7 +82,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 onChanged: _onLoginChanged,
               ),
-              const SizedBox(height: 24,),
+              const SizedBox(
+                height: 24,
+              ),
               Visibility(
                 visible: widget.step == LoginStep.password,
                 child: TextFormField(
@@ -91,21 +109,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   OutlinedButton(
                     onPressed: () {
-                      // forgot password route
+                      // TODO: forgot password route
                     },
-                    child: const Text('Forgot password?',
-                        style: TextStyle(color: Colors.white)),
+                    child: Text('Forgot password?',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.white, fontWeight: FontWeight.w700)),
                   ),
                   OutlinedButton(
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all(
                           isMainBtnEnabled ? Colors.white : Colors.grey),
                     ),
-                    child: const Text(
-                      'Next',
-                      style: TextStyle(color: Colors.black),
-                    ),
                     onPressed: _onMainBtnPressed,
+                    child: Text(
+                      widget.step == LoginStep.login ? 'Next' : 'Log in',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color:
+                              isMainBtnEnabled ? Colors.black : Colors.black54,
+                          fontWeight: FontWeight.w700),
+                    ),
                   ),
                 ],
               ),
@@ -125,7 +147,8 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       return;
     }
-    if (_passwordController.text.isEmpty) return;
+    if (widget.step == LoginStep.password && _passwordController.text.isEmpty)
+      return;
 
     setState(() {
       isMainBtnEnabled = true;
@@ -148,8 +171,33 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void _onMainBtnPressed() {
+  void _onMainBtnPressed() async {
     if (!isMainBtnEnabled) return;
-    const LoginScreenRoute(step: LoginStep.password).pushReplacement(context);
+    if (widget.step == LoginStep.login) {
+      LoginScreenRoute(step: LoginStep.password, login: _loginController.text)
+          .pushReplacement(context);
+      return;
+    }
+
+    try {
+      final credentials = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _loginController.text,
+        password: _passwordController.text,
+      );
+
+      Fluttertoast.showToast(
+        msg: "Login successful!",
+        backgroundColor: Colors.blueGrey,
+        textColor: Colors.white,
+      );
+
+      print('credentials: $credentials');
+    } on FirebaseAuthException catch (e) {
+      Fluttertoast.showToast(
+        msg: e.code == 'wrong-password' ? 'Wrong password!' : 'Login failed!',
+        backgroundColor: Colors.blueGrey,
+        textColor: Colors.white,
+      );
+    }
   }
 }
