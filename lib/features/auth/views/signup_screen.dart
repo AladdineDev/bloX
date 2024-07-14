@@ -5,7 +5,6 @@ import 'package:blox/features/auth/widgets/x_header.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:'
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
