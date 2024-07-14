@@ -1,5 +1,7 @@
 import 'package:blox/core/common/widgets/my_sliver_app_bar.dart';
 import 'package:blox/core/common/widgets/my_drawer.dart';
+import 'package:blox/core/router/router.dart';
+import 'package:blox/features/tweet/widgets/tweet.dart';
 import 'package:blox/features/tweet/widgets/tweet_list_tab_bar.dart';
 import 'package:blox/features/tweet/widgets/tweet_list_tabs.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ class TweetListScreen extends StatelessWidget {
         drawer: const MyDrawer(),
         body: SafeArea(
           child: NestedScrollView(
+            floatHeaderSlivers: true,
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return <Widget>[
                 SliverOverlapAbsorber(
@@ -45,17 +48,18 @@ class TweetListScreen extends StatelessWidget {
                             context,
                           ),
                         ),
-                        SliverPadding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          sliver: SliverList.separated(
-                            itemCount: 50,
-                            itemBuilder: (context, index) {
-                              return Text('${tab.name}: Item $index');
-                            },
-                            separatorBuilder: (context, index) {
-                              return const Divider();
-                            },
-                          ),
+                        SliverList.separated(
+                          itemCount: 50,
+                          itemBuilder: (context, index) {
+                            return Tweet(
+                              onTap: () {
+                                //TODO: implement this method
+                              },
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return const Divider();
+                          },
                         ),
                       ],
                     );
@@ -65,7 +69,17 @@ class TweetListScreen extends StatelessWidget {
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _onFloationgActionButtonPressed(context),
+          child: const Icon(
+            Icons.edit_outlined,
+          ),
+        ),
       ),
     );
+  }
+
+  void _onFloationgActionButtonPressed(BuildContext context) {
+    TweetPostScreenRoute().push(context);
   }
 }

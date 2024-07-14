@@ -4,6 +4,11 @@ final darkTheme = ThemeData.dark().copyWith(
   colorScheme: const ColorScheme.dark(
     primary: Color(0xff1d9bf0),
     surface: Colors.black,
+    onPrimary: Colors.white,
+    onSurface: Color(0xff7c838b),
+    onSurfaceVariant: Colors.white,
+    error: Color(0xfff4222f),
+    errorContainer: Color(0xffffd401),
   ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
@@ -73,9 +78,10 @@ final darkTheme = ThemeData.dark().copyWith(
   scaffoldBackgroundColor: Colors.black,
   appBarTheme: const AppBarTheme(
     color: Colors.black,
+    foregroundColor: Colors.white,
   ),
   tabBarTheme: TabBarTheme(
-    labelPadding: const EdgeInsets.only(bottom: 8),
+    labelPadding: const EdgeInsets.symmetric(vertical: 8),
     dividerColor: const Color(0xff7c838b),
     indicatorSize: TabBarIndicatorSize.tab,
     indicator: UnderlineTabIndicator(
@@ -99,5 +105,32 @@ final darkTheme = ThemeData.dark().copyWith(
   dividerTheme: const DividerThemeData(
     color: Color(0xff7c838b),
     thickness: 0.5,
+    space: 0,
+  ),
+  listTileTheme: const ListTileThemeData(
+    contentPadding: EdgeInsets.symmetric(horizontal: 20),
+    minTileHeight: 48,
+    titleTextStyle: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+  expansionTileTheme: const ExpansionTileThemeData(
+    textColor: Colors.white,
+    shape: Border(),
+  ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    shape: CircleBorder(),
+    iconSize: 28,
+  ),
+  filledButtonTheme: FilledButtonThemeData(
+    style: FilledButton.styleFrom(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      minimumSize: const Size(64, 32),
+      textStyle: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
   ),
 );

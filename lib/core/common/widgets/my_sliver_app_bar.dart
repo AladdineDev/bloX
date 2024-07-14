@@ -9,8 +9,10 @@ class MySliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      floating: true,
+      snap: true,
       centerTitle: true,
-      leading: ProfilePicture(
+      leading: ProfilePicture.small(
         image: const NetworkImage(
           "https://abs.twimg.com/sticky/default_profile_images/default_profile.png",
         ),
@@ -20,12 +22,6 @@ class MySliverAppBar extends StatelessWidget {
         "assets/images/x.png",
         width: 28,
       ),
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.settings_outlined),
-        ),
-      ],
       bottom: bottom,
     );
   }
