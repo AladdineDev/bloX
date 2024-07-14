@@ -50,6 +50,6 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Allow people to hear you in the space</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow X access to your camera, to use the improved X camera.</string>
+	<string>To save your edited video, we need permission to access media on your device.</string>
 </dict>
 </plist>
