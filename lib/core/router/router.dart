@@ -1,11 +1,11 @@
-import 'package:blox/features/auth/views/login_screen.dart';
 import 'package:blox/features/auth/views/signup_screen.dart';
 import 'package:blox/features/tweet/views/tweet_post_screen.dart';
-import 'package:blox/features/profil/views/profil_screen.dart';
 import 'package:blox/features/tweet/views/tweet_list_screen.dart';
-import 'package:blox/features/webview/views/webview_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:blox/features/auth/views/login_screen.dart';
+import 'package:blox/features/profil/views/profil_screen.dart';
+import 'package:blox/features/webview/views/webview_screen.dart';
 
 part 'router.g.dart';
 
@@ -20,10 +20,9 @@ class AppRouter {
 
   final router = GoRouter(
     routes: $appRoutes,
-    initialLocation: '/sign-up',
+    initialLocation: '/new-tweet',
   );
 }
-
 
 @TypedGoRoute<SignupScreenRoute>(path: '/sign-up')
 @immutable
@@ -42,7 +41,6 @@ class TweetListScreenRoute extends GoRouteData {
     return const TweetListScreen();
   }
 }
-
 
 @TypedGoRoute<ProfileScreenRoute>(path: '/profile')
 @immutable
@@ -79,9 +77,9 @@ class WebviewScreenRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<TweetCreationScreenRoute>(path: '/new-tweet')
+@TypedGoRoute<TweetPostScreenRoute>(path: '/new-tweet')
 @immutable
-class TweetCreationScreenRoute extends GoRouteData {
+class TweetPostScreenRoute extends GoRouteData {
   @override
   CustomTransitionPage buildPage(BuildContext context, GoRouterState state) {
     return CustomTransitionPage(
@@ -98,7 +96,7 @@ class TweetCreationScreenRoute extends GoRouteData {
           child: child,
         );
       },
-      child: const TweetCreationScreen(),
+      child: const TweetPostScreen(),
     );
   }
 }
