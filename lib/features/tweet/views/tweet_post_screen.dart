@@ -33,9 +33,12 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
           icon: const Icon(Icons.close),
         ),
         actions: [
-          FilledButton(
-            onPressed: enablePostButton ? () {} : null,
-            child: const Text('Post'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: FilledButton(
+              onPressed: enablePostButton ? () {} : null,
+              child: const Text('Post'),
+            ),
           ),
         ],
       ),
@@ -45,7 +48,8 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
             Expanded(
               child: SingleChildScrollView(
                 physics: const ClampingScrollPhysics(),
-                child: Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     children: [
                       Row(
