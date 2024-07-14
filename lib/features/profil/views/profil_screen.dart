@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/header.dart';
+import '../widgets/header_section.dart';
 import '../widgets/profile_info.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -8,36 +8,73 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DefaultTabController(
+    return DefaultTabController(
       length: 4,
       child: Scaffold(
-        body: Column(
-          children: [
-            ProfileHeader(),
-            SizedBox(height: 30),
-            ProfileInfo(
-                name: 'AladdineDev', handle: '@voilà', bio: 'blablablabla'),
-            TabBar(
-              tabs: [
-                Tab(text: 'About'),
-                Tab(text: 'Tweets'),
-                Tab(text: 'Tweets & reponses'),
-                Tab(text: 'Médias'),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  Icon(Icons.person_2),
-                  Icon(Icons.directions_car),
-                  Icon(Icons.directions_transit),
-                  Icon(Icons.directions_bike),
-                ],
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+             const  SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    ProfileHeader(),
+                    SizedBox(height: 30),
+                    ProfileInfo(
+                      name: 'AladdineDev',
+                      handle: '@voilà',
+                      bio: 'blablablabla',
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              SliverPersistentHeader(
+                delegate: _SliverAppBarDelegate(
+                 const TabBar(
+                    tabs:  [
+                      Tab(text: 'About'),
+                      Tab(text: 'Tweets'),
+                      Tab(text: 'Tweets & reponses'),
+                      Tab(text: 'Médias'),
+                    ],
+                  ),
+                ),
+                pinned: true,
+              ),
+            ];
+          },
+          body: const TabBarView(
+            children: [
+              Icon(Icons.person_2),
+              Icon(Icons.directions_car),
+              Icon(Icons.directions_transit),
+              Icon(Icons.directions_bike),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar _tabBar;
+
+  _SliverAppBarDelegate(this._tabBar);
+
+  @override
+  double get minExtent => _tabBar.preferredSize.height;
+  @override
+  double get maxExtent => _tabBar.preferredSize.height;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Material(
+      child: _tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return false;
   }
 }
