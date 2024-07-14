@@ -20,7 +20,7 @@ class AppRouter {
 
   final router = GoRouter(
     routes: $appRoutes,
-    initialLocation: '/new-tweet',
+    initialLocation: '/sign-up',
   );
 }
 
