@@ -6,7 +6,7 @@ class TweetListTabBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> tabs;
 
   @override
-  Size get preferredSize => const Size.fromHeight(kTextTabBarHeight);
+  Size get preferredSize => const Size.fromHeight(40);
 
   @override
   Widget build(BuildContext context) {

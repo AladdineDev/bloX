@@ -11,7 +11,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "BloX",
       routerConfig: AppRouter().router,
-      theme: theme.lightTheme,
       darkTheme: theme.darkTheme,
       themeMode: ThemeMode.dark,
     );

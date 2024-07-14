@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To attach media, we need access to your photo library</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow people to hear you in the space</string>
+	<key>NSCameraUsageDescription</key>
+	<string>To save your edited video, we need permission to access media on your device.</string>
 </dict>
 </plist>

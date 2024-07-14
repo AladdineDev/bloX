@@ -1,32 +1,51 @@
 import 'package:flutter/material.dart';
 
 class ProfilePicture extends StatelessWidget {
-  const ProfilePicture({
+  const ProfilePicture.small({
     super.key,
     required this.onPressed,
     required this.image,
-    this.size = const Size.square(48),
+    this.dimension = 28,
+    this.padding = const EdgeInsets.all(12),
+  });
+
+  const ProfilePicture.medium({
+    super.key,
+    required this.onPressed,
+    required this.image,
+    this.dimension = 40,
+    this.padding = const EdgeInsets.all(0),
   });
 
   final VoidCallback onPressed;
   final ImageProvider image;
-  final Size size;
+  final double dimension;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: onPressed,
-      icon: const ClipOval(
-        child: Image(
-          image: NetworkImage(
-            "https://abs.twimg.com/sticky/default_profile_images/default_profile.png",
+    return SizedBox.square(
+      dimension: dimension,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(32),
+        onTap: onPressed,
+        child: Padding(
+          padding: padding,
+          child: ClipOval(
+            child: Image(
+              image: image,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(
+                  Icons.account_circle_outlined,
+                  size: dimension,
+                );
+              },
+              fit: BoxFit.cover,
+              width: dimension,
+              height: dimension,
+            ),
           ),
-          fit: BoxFit.cover,
         ),
-      ),
-      style: IconButton.styleFrom(
-        padding: const EdgeInsets.all(6),
-        fixedSize: size,
       ),
     );
   }
