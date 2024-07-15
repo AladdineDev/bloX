@@ -14,6 +14,7 @@ class TweetPostScreen extends StatefulWidget {
 
   static const postMaxLength = 280;
   static const postMaxLengthBeforeWarning = 260;
+  static const maxMediaPicked = 4;
 
   @override
   State<TweetPostScreen> createState() => _TweetPostScreenState();
@@ -33,6 +34,9 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaLimit = TweetPostScreen.maxMediaPicked - mediaList.length;
+    final hasExceededMaxMedia =
+        mediaList.length > TweetPostScreen.maxMediaPicked;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -158,8 +162,20 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
                       icon: const Icon(Icons.image_outlined),
                       color: context.colorScheme.primary,
                       onPressed: () async {
-                        final pickedMedia =
-                            await picker.pickMultipleMedia(limit: 4);
+                        if (hasExceededMaxMedia) return _showMaxMediaSnackBar();
+                        final List<XFile> pickedMedia;
+                        if (mediaLimit < 2) {
+                          pickedMedia =
+                              [await picker.pickMedia()].nonNulls.toList();
+                        } else {
+                          pickedMedia = await picker.pickMultipleMedia(
+                            limit: mediaLimit,
+                          );
+                        }
+                        if (mediaList.length + pickedMedia.length >
+                            TweetPostScreen.maxMediaPicked) {
+                          return _showMaxMediaSnackBar();
+                        }
                         setState(() {
                           mediaList.addAll(pickedMedia);
                         });
@@ -170,6 +186,7 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
                       icon: const Icon(Icons.camera_alt_outlined),
                       color: context.colorScheme.primary,
                       onPressed: () async {
+                        if (hasExceededMaxMedia) return _showMaxMediaSnackBar();
                         final pickedMedia =
                             await picker.pickImage(source: ImageSource.camera);
                         if (pickedMedia == null) return;
@@ -183,6 +200,7 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
                       icon: const Icon(Icons.video_camera_back_outlined),
                       color: context.colorScheme.primary,
                       onPressed: () async {
+                        if (hasExceededMaxMedia) return _showMaxMediaSnackBar();
                         final pickedMedia =
                             await picker.pickVideo(source: ImageSource.camera);
                         if (pickedMedia == null) return;
@@ -198,6 +216,14 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  void _showMaxMediaSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("4 media limit reached"),
       ),
     );
   }
