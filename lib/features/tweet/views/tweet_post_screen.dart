@@ -4,6 +4,7 @@ import 'package:blox/core/extensions/x_file_extension.dart';
 import 'package:blox/core/router/router.dart';
 import 'package:blox/features/tweet/widgets/tweet_post_image.dart';
 import 'package:blox/features/tweet/widgets/tweet_post_length_indicator.dart';
+import 'package:blox/features/tweet/widgets/tweet_post_text_field.dart';
 import 'package:blox/features/tweet/widgets/tweet_post_video.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -77,24 +78,15 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
                             child: Column(
                               children: [
                                 const SizedBox(height: 2),
-                                StatefulBuilder(builder: (context, setState) {
-                                  return TextFormField(
-                                    controller: _postController,
-                                    autofocus: true,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        enablePostButton =
-                                            value.trim().isNotEmpty;
-                                      });
-                                    },
-                                    keyboardType: TextInputType.multiline,
-                                    decoration: const InputDecoration.collapsed(
-                                      hintText: "What's happening?",
-                                    ),
-                                    maxLines: null,
-                                    style: context.textTheme.titleMedium,
-                                  );
-                                }),
+                                TweetPostTextField(
+                                  controller: _postController,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      enablePostButton =
+                                          value.trim().isNotEmpty;
+                                    });
+                                  },
+                                ),
                                 const SizedBox(height: 16),
                                 GridView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
