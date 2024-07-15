@@ -75,6 +75,7 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
                                 StatefulBuilder(builder: (context, setState) {
                                   return TextFormField(
                                     controller: _postController,
+                                    autofocus: true,
                                     onChanged: (value) {
                                       setState(() {
                                         enablePostButton =
