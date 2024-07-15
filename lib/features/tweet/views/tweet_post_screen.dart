@@ -1,9 +1,10 @@
 import 'package:blox/core/common/widgets/profile_picture.dart';
-import 'package:blox/core/common/widgets/spinner.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
+import 'package:blox/core/extensions/x_file_extension.dart';
 import 'package:blox/core/router/router.dart';
 import 'package:blox/features/tweet/widgets/tweet_post_image.dart';
 import 'package:blox/features/tweet/widgets/tweet_post_length_indicator.dart';
+import 'package:blox/features/tweet/widgets/tweet_post_video.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -103,32 +104,36 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
                                   ),
                                   itemBuilder: (context, index) {
                                     final media = mediaList[index];
-                                    return FutureBuilder(
-                                      future: media.readAsBytes(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const Spinner.medium();
-                                        }
-                                        final mediaBytes = snapshot.data;
-                                        if (mediaBytes == null) {
-                                          return const SizedBox.shrink();
-                                        }
-                                        return TweetPostImage(
-                                          mediaBytes: mediaBytes,
-                                          onTap: () {
-                                            TweetPostImageViewerScreenRoute(
-                                              imageBytes: mediaBytes,
-                                            ).push(context);
-                                          },
-                                          onDelete: () {
-                                            setState(() {
-                                              mediaList.remove(media);
-                                            });
-                                          },
-                                        );
-                                      },
-                                    );
+                                    if (media.isImage) {
+                                      return TweetPostImage(
+                                        mediaPath: media.path,
+                                        onTap: () {
+                                          TweetPostImageViewerScreenRoute(
+                                            mediaPath: media.path,
+                                          ).push(context);
+                                        },
+                                        onDelete: () {
+                                          setState(() {
+                                            mediaList.remove(media);
+                                          });
+                                        },
+                                      );
+                                    } else if (media.isVideo) {
+                                      return TweetPostVideo(
+                                        mediaPath: media.path,
+                                        onTap: () {
+                                          TweetPostVideoViewerScreenRoute(
+                                            mediaPath: media.path,
+                                          ).push(context);
+                                        },
+                                        onDelete: () {
+                                          setState(() {
+                                            mediaList.remove(media);
+                                          });
+                                        },
+                                      );
+                                    }
+                                    return const SizedBox.shrink();
                                   },
                                 )
                               ],

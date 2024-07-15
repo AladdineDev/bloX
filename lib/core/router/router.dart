@@ -1,9 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:blox/features/auth/views/signup_screen.dart';
-import 'package:blox/features/tweet/views/tweet_post_image_view.dart';
+import 'package:blox/features/tweet/views/tweet_post_image_viewer.dart';
 import 'package:blox/features/tweet/views/tweet_post_screen.dart';
 import 'package:blox/features/tweet/views/tweet_list_screen.dart';
+import 'package:blox/features/tweet/views/tweet_post_video_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:blox/features/auth/views/login_screen.dart';
@@ -117,12 +118,25 @@ class TweetPostScreenRoute extends GoRouteData {
 @TypedGoRoute<TweetPostImageViewerScreenRoute>(path: '/tweet-post-image-viewer')
 @immutable
 class TweetPostImageViewerScreenRoute extends GoRouteData {
-  const TweetPostImageViewerScreenRoute({required this.imageBytes});
+  const TweetPostImageViewerScreenRoute({required this.mediaPath});
 
-  final List<int>? imageBytes;
+  final String mediaPath;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return TweetPostImageViewerScreen(imageBytes: imageBytes ?? []);
+    return TweetPostImageViewerScreen(mediaPath: mediaPath);
+  }
+}
+
+@TypedGoRoute<TweetPostVideoViewerScreenRoute>(path: '/tweet-post-video-viewer')
+@immutable
+class TweetPostVideoViewerScreenRoute extends GoRouteData {
+  const TweetPostVideoViewerScreenRoute({required this.mediaPath});
+
+  final String mediaPath;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return TweetPostVideoViewerScreen(mediaPath: mediaPath);
   }
 }
