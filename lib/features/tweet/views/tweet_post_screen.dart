@@ -151,15 +151,47 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  color: context.colorScheme.primary,
-                  onPressed: () async {
-                    final pickedMedia =
-                        await picker.pickMultipleMedia(limit: 4);
-                    mediaList.addAll(pickedMedia);
-                    setState(() {});
-                  },
-                  icon: const Icon(Icons.image_outlined),
+                Row(
+                  children: [
+                    IconButton(
+                      tooltip: "Pick media",
+                      icon: const Icon(Icons.image_outlined),
+                      color: context.colorScheme.primary,
+                      onPressed: () async {
+                        final pickedMedia =
+                            await picker.pickMultipleMedia(limit: 4);
+                        setState(() {
+                          mediaList.addAll(pickedMedia);
+                        });
+                      },
+                    ),
+                    IconButton(
+                      tooltip: "Take picture",
+                      icon: const Icon(Icons.camera_alt_outlined),
+                      color: context.colorScheme.primary,
+                      onPressed: () async {
+                        final pickedMedia =
+                            await picker.pickImage(source: ImageSource.camera);
+                        if (pickedMedia == null) return;
+                        setState(() {
+                          mediaList.add(pickedMedia);
+                        });
+                      },
+                    ),
+                    IconButton(
+                      tooltip: "Take video",
+                      icon: const Icon(Icons.video_camera_back_outlined),
+                      color: context.colorScheme.primary,
+                      onPressed: () async {
+                        final pickedMedia =
+                            await picker.pickVideo(source: ImageSource.camera);
+                        if (pickedMedia == null) return;
+                        setState(() {
+                          mediaList.add(pickedMedia);
+                        });
+                      },
+                    ),
+                  ],
                 ),
                 TweetPostLengthIndicator(postController: _postController),
               ],

@@ -18,12 +18,17 @@ class TweetPostImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: BorderRadius.circular(12),
       onTap: onTap,
       child: Stack(
+        fit: StackFit.expand,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.file(File(mediaPath)),
+            child: Image.file(
+              File(mediaPath),
+              fit: BoxFit.cover,
+            ),
           ),
           Positioned(
             top: 0,
