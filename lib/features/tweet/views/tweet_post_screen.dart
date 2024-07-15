@@ -1,8 +1,10 @@
 import 'package:blox/core/common/widgets/profile_picture.dart';
+import 'package:blox/core/common/widgets/spinner.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/features/tweet/widgets/tweet_post_length_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 class TweetPostScreen extends StatefulWidget {
   const TweetPostScreen({super.key});
@@ -17,6 +19,8 @@ class TweetPostScreen extends StatefulWidget {
 class _TweetPostScreenState extends State<TweetPostScreen> {
   final _postController = TextEditingController();
   bool enablePostButton = false;
+  final ImagePicker picker = ImagePicker();
+  List<XFile> mediaList = [];
 
   @override
   void dispose() {
@@ -66,16 +70,83 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
                             child: Column(
                               children: [
                                 const SizedBox(height: 2),
-                                TextFormField(
-                                  controller: _postController,
-                                  onChanged: _onPostFieldChanged,
-                                  keyboardType: TextInputType.multiline,
-                                  decoration: const InputDecoration.collapsed(
-                                    hintText: "What's happening?",
+                                StatefulBuilder(builder: (context, setState) {
+                                  return TextFormField(
+                                    controller: _postController,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        enablePostButton =
+                                            value.trim().isNotEmpty;
+                                      });
+                                    },
+                                    keyboardType: TextInputType.multiline,
+                                    decoration: const InputDecoration.collapsed(
+                                      hintText: "What's happening?",
+                                    ),
+                                    maxLines: null,
+                                    style: context.textTheme.titleMedium,
+                                  );
+                                }),
+                                const SizedBox(height: 16),
+                                GridView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: mediaList.length,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 4,
+                                    mainAxisSpacing: 4,
                                   ),
-                                  maxLines: null,
-                                  style: context.textTheme.titleMedium,
-                                ),
+                                  itemBuilder: (context, index) {
+                                    final media = mediaList[index];
+                                    return FutureBuilder(
+                                      future: media.readAsBytes(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Spinner.medium();
+                                        }
+                                        return Stack(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: Image.memory(
+                                                snapshot.data!,
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 8,
+                                              right: 12,
+                                              child: Container(
+                                                width: 24,
+                                                height: 24,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black
+                                                      .withOpacity(0.8),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      mediaList.remove(media);
+                                                    });
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.close_rounded,
+                                                    size: 20,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                )
                               ],
                             ),
                           )
@@ -93,8 +164,11 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
               children: [
                 IconButton(
                   color: context.colorScheme.primary,
-                  onPressed: () {
-                    //TODO: implement this method
+                  onPressed: () async {
+                    final pickedMedia =
+                        await picker.pickMultipleMedia(limit: 4);
+                    mediaList.addAll(pickedMedia);
+                    setState(() {});
                   },
                   icon: const Icon(Icons.image_outlined),
                 ),
@@ -105,11 +179,5 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
         ),
       ),
     );
-  }
-
-  void _onPostFieldChanged(String value) {
-    setState(() {
-      enablePostButton = value.trim().isNotEmpty;
-    });
   }
 }
