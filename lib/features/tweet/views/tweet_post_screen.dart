@@ -1,6 +1,8 @@
 import 'package:blox/core/common/widgets/profile_picture.dart';
 import 'package:blox/core/common/widgets/spinner.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
+import 'package:blox/core/router/router.dart';
+import 'package:blox/features/tweet/widgets/tweet_post_image.dart';
 import 'package:blox/features/tweet/widgets/tweet_post_length_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -107,41 +109,22 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
                                             ConnectionState.waiting) {
                                           return const Spinner.medium();
                                         }
-                                        return Stack(
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: Image.memory(
-                                                snapshot.data!,
-                                              ),
-                                            ),
-                                            Positioned(
-                                              top: 8,
-                                              right: 12,
-                                              child: Container(
-                                                width: 24,
-                                                height: 24,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.black
-                                                      .withOpacity(0.8),
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      mediaList.remove(media);
-                                                    });
-                                                  },
-                                                  child: const Icon(
-                                                    Icons.close_rounded,
-                                                    size: 20,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                        final mediaBytes = snapshot.data;
+                                        if (mediaBytes == null) {
+                                          return const SizedBox.shrink();
+                                        }
+                                        return TweetPostImage(
+                                          mediaBytes: mediaBytes,
+                                          onTap: () {
+                                            TweetPostImageViewerScreenRoute(
+                                              imageBytes: mediaBytes,
+                                            ).push(context);
+                                          },
+                                          onDelete: () {
+                                            setState(() {
+                                              mediaList.remove(media);
+                                            });
+                                          },
                                         );
                                       },
                                     );

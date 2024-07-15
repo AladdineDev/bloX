@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:blox/features/auth/views/signup_screen.dart';
+import 'package:blox/features/tweet/views/tweet_post_image_view.dart';
 import 'package:blox/features/tweet/views/tweet_post_screen.dart';
 import 'package:blox/features/tweet/views/tweet_list_screen.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +24,7 @@ class AppRouter {
 
   final router = GoRouter(
     routes: $appRoutes,
-    initialLocation: '/profile',
+    initialLocation: '/sign-up',
   );
 }
 
@@ -54,10 +57,10 @@ class ProfileScreenRoute extends GoRouteData {
 
 @TypedGoRoute<EditeProfileScreenRoute>(path: '/edite-profile')
 @immutable
-class EditeProfileScreenRoute extends GoRouteData{
+class EditeProfileScreenRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state){
-    return  const EditeProfileScreen() ;
+  Widget build(BuildContext context, GoRouterState state) {
+    return const EditeProfileScreen();
   }
 }
 
@@ -108,5 +111,18 @@ class TweetPostScreenRoute extends GoRouteData {
       },
       child: const TweetPostScreen(),
     );
+  }
+}
+
+@TypedGoRoute<TweetPostImageViewerScreenRoute>(path: '/tweet-post-image-viewer')
+@immutable
+class TweetPostImageViewerScreenRoute extends GoRouteData {
+  const TweetPostImageViewerScreenRoute({required this.imageBytes});
+
+  final List<int>? imageBytes;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return TweetPostImageViewerScreen(imageBytes: imageBytes ?? []);
   }
 }
