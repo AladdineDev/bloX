@@ -1,6 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:blox/features/auth/views/signup_screen.dart';
+import 'package:blox/features/tweet/views/tweet_detail_screen.dart';
 import 'package:blox/features/tweet/views/tweet_post_image_viewer.dart';
 import 'package:blox/features/tweet/views/tweet_post_screen.dart';
 import 'package:blox/features/tweet/views/tweet_list_screen.dart';
@@ -25,7 +24,7 @@ class AppRouter {
 
   final router = GoRouter(
     routes: $appRoutes,
-    initialLocation: '/sign-up',
+    initialLocation: '/tweet-detail',
   );
 }
 
@@ -44,6 +43,15 @@ class TweetListScreenRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const TweetListScreen();
+  }
+}
+
+@TypedGoRoute<TweetDetailScreenRoute>(path: '/tweet-detail')
+@immutable
+class TweetDetailScreenRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const TweetDetailScreen();
   }
 }
 

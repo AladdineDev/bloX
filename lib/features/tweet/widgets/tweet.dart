@@ -65,7 +65,6 @@ class Tweet extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   const TweetBottomButtonsBar(),
-                  const SizedBox(height: 2),
                 ],
               ),
             ),
