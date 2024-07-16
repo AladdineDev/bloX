@@ -27,6 +27,10 @@ dependencies:
   equatable: ^2.0.5
   mime: ^1.0.5
   video_player: ^2.9.1
+  font_awesome_flutter: ^10.7.0
+  fluttertoast: ^8.2.6
+  image_cropper: ^7.1.0
+
 
 dev_dependencies:
   flutter_test:
