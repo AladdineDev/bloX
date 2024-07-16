@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,12 @@ class Input extends StatefulWidget {
   final int? maxLength;
   final String? errorText;
   final Function()? onTap;
+  final Function(String)? onChanged;
+  final Function(String)? debouncedOnChanged;
+  final String? Function(String?)? validator;
+  final bool showCheckMarkWhenValid;
+  final bool Function(String? value)? customValidation;
+  final bool readOnly;
 
   const Input({
     super.key,
@@ -20,6 +27,12 @@ class Input extends StatefulWidget {
     this.maxLength,
     this.errorText,
     this.onTap,
+    this.onChanged,
+    this.debouncedOnChanged,
+    this.validator,
+    this.showCheckMarkWhenValid = false,
+    this.customValidation,
+    this.readOnly = false
   });
 
   @override
@@ -32,6 +45,8 @@ class _InputState extends State<Input> {
 
   Color mainColor = Colors.grey;
   bool _isPasswordVisible = false;
+
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -48,6 +63,7 @@ class _InputState extends State<Input> {
 
   @override
   void dispose() {
+    _debounce?.cancel();
     if (widget.controller == null) {
       _controller.dispose();
     }
@@ -59,58 +75,83 @@ class _InputState extends State<Input> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(minHeight: 85),
-      child: TextFormField(
-        focusNode: _focusNode,
-        maxLength: widget.maxLength,
-        keyboardType: widget.keyboardType,
-        controller: _controller,
-        onTap: widget.onTap,
-        obscureText: widget.keyboardType == TextInputType.visiblePassword
-            ? !_isPasswordVisible
-            : false,
-        decoration: InputDecoration(
-          errorText: widget.errorText,
-          border: const OutlineInputBorder(),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: mainColor),
-          ),
-          labelText: widget.labelText,
-          labelStyle: TextStyle(
-            color: mainColor,
-          ),
-          counterStyle: const TextStyle(color: Colors.grey),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          suffixIcon: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Visibility(
-                visible: widget.keyboardType == TextInputType.visiblePassword,
-                child: IconButton(
-                  icon: Icon(
-                    _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                    color: mainColor,
+    return GestureDetector(
+      onTap: () {
+        widget.onTap?.call();
+      },
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 85),
+        child: TextFormField(
+          focusNode: _focusNode,
+          maxLength: widget.maxLength,
+          keyboardType: widget.keyboardType,
+          controller: _controller,
+          readOnly: widget.readOnly,
+          onChanged: _onInputChanged,
+          obscureText: widget.keyboardType == TextInputType.visiblePassword
+              ? !_isPasswordVisible
+              : false,
+          validator: widget.validator,
+          decoration: InputDecoration(
+            errorText: widget.errorText,
+            border: const OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: mainColor),
+            ),
+            labelText: widget.labelText,
+            labelStyle: TextStyle(
+              color: widget.errorText != null ? Colors.red : mainColor,
+            ),
+            counterStyle: const TextStyle(color: Colors.grey),
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            suffixIcon: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Visibility(
+                  visible: widget.keyboardType == TextInputType.visiblePassword,
+                  child: IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: mainColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _isPasswordVisible = !_isPasswordVisible;
-                    });
-                  },
                 ),
-              ),
-              Visibility(
-                visible: widget.errorText != null,
-                child: const Icon(
-                  Icons.error,
-                  color: Colors.red,
-                  size: 20,
-                ),
-              )
-            ],
+                _buildValidationIcon(),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  void _onInputChanged(String value) {
+    widget.onChanged?.call(value);
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      widget.debouncedOnChanged?.call(value);
+      setState(() {
+        // Force rebuild to update validation icon
+      });
+    });
+  }
+
+  Widget _buildValidationIcon() {
+    if (widget.errorText != null) {
+      return const Icon(Icons.error, color: Colors.red, size: 20);
+    }
+    final validationResult = widget.customValidation?.call(_controller.text) ??
+        _controller.text.isNotEmpty;
+    if (widget.showCheckMarkWhenValid && validationResult) {
+      return const Icon(Icons.check_circle, color: Colors.green, size: 20);
+    }
+    return const SizedBox();
   }
 }
