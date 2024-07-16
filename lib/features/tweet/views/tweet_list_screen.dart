@@ -53,6 +53,7 @@ class TweetListScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return Tweet(
                               onTap: () {
+                                TweetDetailScreenRoute().push(context);
                                 //TODO: implement this method
                               },
                             );

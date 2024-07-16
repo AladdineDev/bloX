@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 final darkTheme = ThemeData.dark().copyWith(
   colorScheme: const ColorScheme.dark(
     primary: Color(0xff1d9bf0),
+    secondary: Colors.white,
     surface: Colors.black,
     onPrimary: Colors.white,
     onSurface: Color(0xff7c838b),
     onSurfaceVariant: Colors.white,
+    onInverseSurface: Colors.black,
     error: Color(0xfff4222f),
     errorContainer: Color(0xffffd401),
   ),
@@ -130,6 +132,17 @@ final darkTheme = ThemeData.dark().copyWith(
       textStyle: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
+      ),
+    ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: FilledButton.styleFrom(
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
+      textStyle: const TextStyle(
+        fontSize: 18,
+        color: Colors.black,
+        fontWeight: FontWeight.w700,
       ),
     ),
   ),
