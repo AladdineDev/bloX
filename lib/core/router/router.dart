@@ -1,8 +1,11 @@
 import 'package:blox/features/auth/views/login_screen.dart';
 import 'package:blox/features/auth/views/onboarding_screen.dart';
 import 'package:blox/features/auth/views/signup_screen.dart';
+import 'package:blox/features/tweet/views/tweet_detail_screen.dart';
+import 'package:blox/features/tweet/views/tweet_post_image_viewer.dart';
 import 'package:blox/features/tweet/views/tweet_post_screen.dart';
 import 'package:blox/features/tweet/views/tweet_list_screen.dart';
+import 'package:blox/features/tweet/views/tweet_post_video_viewer.dart';
 import 'package:blox/features/webview/views/webview_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -60,6 +63,14 @@ class TweetListScreenRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<TweetDetailScreenRoute>(path: '/tweet-detail')
+@immutable
+class TweetDetailScreenRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const TweetDetailScreen();
+  }
+}
 
 @TypedGoRoute<ProfileScreenRoute>(path: '/profile')
 @immutable
@@ -72,10 +83,10 @@ class ProfileScreenRoute extends GoRouteData {
 
 @TypedGoRoute<EditeProfileScreenRoute>(path: '/edite-profile')
 @immutable
-class EditeProfileScreenRoute extends GoRouteData{
+class EditeProfileScreenRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state){
-    return  const EditeProfileScreen() ;
+  Widget build(BuildContext context, GoRouterState state) {
+    return const EditeProfileScreen();
   }
 }
 
@@ -127,5 +138,31 @@ class TweetPostScreenRoute extends GoRouteData {
       },
       child: const TweetPostScreen(),
     );
+  }
+}
+
+@TypedGoRoute<TweetPostImageViewerScreenRoute>(path: '/tweet-post-image-viewer')
+@immutable
+class TweetPostImageViewerScreenRoute extends GoRouteData {
+  const TweetPostImageViewerScreenRoute({required this.mediaPath});
+
+  final String mediaPath;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return TweetPostImageViewerScreen(mediaPath: mediaPath);
+  }
+}
+
+@TypedGoRoute<TweetPostVideoViewerScreenRoute>(path: '/tweet-post-video-viewer')
+@immutable
+class TweetPostVideoViewerScreenRoute extends GoRouteData {
+  const TweetPostVideoViewerScreenRoute({required this.mediaPath});
+
+  final String mediaPath;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return TweetPostVideoViewerScreen(mediaPath: mediaPath);
   }
 }

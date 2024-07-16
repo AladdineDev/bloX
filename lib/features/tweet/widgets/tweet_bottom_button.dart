@@ -7,35 +7,43 @@ class TweetBottomButton extends StatelessWidget {
     required this.onTap,
     required this.icon,
     this.number,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.size = 16,
   });
 
   final VoidCallback onTap;
   final IconData icon;
   final int? number;
+  final MainAxisAlignment mainAxisAlignment;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
     final number = this.number;
     final color = context.colorScheme.onSurface;
     return InkWell(
-      borderRadius: BorderRadius.circular(4),
       onTap: onTap,
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            size: 16,
-            color: color,
-          ),
-          const SizedBox(width: 2),
-          if (number != null)
-            Text(
-              '$number',
-              style: context.textTheme.bodySmall?.copyWith(
-                color: color,
-              ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          mainAxisAlignment: mainAxisAlignment,
+          children: [
+            Icon(
+              icon,
+              size: size,
+              color: color,
             ),
-        ],
+            if (number != null) ...[
+              const SizedBox(width: 2),
+              Text(
+                '$number',
+                style: context.textTheme.bodySmall?.copyWith(
+                  color: color,
+                ),
+              ),
+            ]
+          ],
+        ),
       ),
     );
   }
