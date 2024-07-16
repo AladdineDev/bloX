@@ -135,4 +135,15 @@ final darkTheme = ThemeData.dark().copyWith(
       ),
     ),
   ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: FilledButton.styleFrom(
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
+      textStyle: const TextStyle(
+        fontSize: 18,
+        color: Colors.black,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
+  ),
 );
