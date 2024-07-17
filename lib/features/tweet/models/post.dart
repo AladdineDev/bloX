@@ -1,4 +1,5 @@
 import 'package:blox/features/auth/models/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 typedef PostId = String;
@@ -56,7 +57,7 @@ class Post extends Equatable {
       mediaUrl: json['mediaUrl'],
       timestamp: json['timestamp'] == null
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(json['timestamp']),
+          : (json['timestamp'] as Timestamp).toDate(),
       views: List<UserId>.from(json['views'] ?? []),
       likes: List<UserId>.from(json['likes'] ?? []),
       comments: List<PostId>.from(json['comments'] ?? []),

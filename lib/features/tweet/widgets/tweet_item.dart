@@ -3,6 +3,7 @@ import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/features/tweet/models/post.dart';
 import 'package:blox/features/tweet/widgets/tweet_bottom_button_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class TweetItem extends StatelessWidget {
   const TweetItem({
@@ -17,6 +18,8 @@ class TweetItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final postContent = post.content ?? "";
+    final timestamp = post.timestamp ?? DateTime.now();
+    final timeAgo = timeago.format(timestamp);
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -58,7 +61,7 @@ class TweetItem extends StatelessWidget {
                       ),
                       const SizedBox(width: 2),
                       Text(
-                        '1d',
+                        timeAgo,
                         style: context.textTheme.bodyMedium?.copyWith(
                           color: context.colorScheme.onSurface,
                         ),
@@ -71,7 +74,7 @@ class TweetItem extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  const TweetBottomButtonsBar(),
+                  TweetBottomButtonsBar(post: post),
                 ],
               ),
             ),

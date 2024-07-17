@@ -16,7 +16,11 @@ class RemotePostDataSource extends PostDataSource {
   @override
   Future<void> createPost({required Post post}) async {
     final postsCollection = _firestore.postsCollection(this);
-    await postsCollection.add(post);
+    await postsCollection.add(
+      post.copyWith(
+        timestamp: DateTime.now(),
+      ),
+    );
   }
 
   @override
@@ -41,7 +45,9 @@ class RemotePostDataSource extends PostDataSource {
     final postDoc = _firestore.postDocument(
       documentPath: postPath(postId: post.id!),
     );
-    await postDoc.update(post.toJson());
+    await postDoc.update(
+      post.copyWith(timestamp: DateTime.now()).toJson(),
+    );
   }
 
   @override
