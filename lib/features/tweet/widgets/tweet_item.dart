@@ -3,8 +3,8 @@ import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/features/tweet/widgets/tweet_bottom_button_bar.dart';
 import 'package:flutter/material.dart';
 
-class Tweet extends StatelessWidget {
-  const Tweet({super.key, required this.onTap});
+class TweetItem extends StatelessWidget {
+  const TweetItem({super.key, required this.onTap});
 
   final VoidCallback onTap;
 

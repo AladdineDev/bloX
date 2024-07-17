@@ -1,7 +1,7 @@
 import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/features/tweet/bloc/tweet_media_bloc/tweet_media_bloc.dart';
 import 'package:blox/features/tweet/views/tweet_detail_reply_bottom_sheet.dart';
-import 'package:blox/features/tweet/widgets/tweet.dart';
+import 'package:blox/features/tweet/widgets/tweet_item.dart';
 import 'package:blox/features/tweet/widgets/tweet_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,7 +45,7 @@ class _TweetDetailScreenState extends State<TweetDetailScreen> {
                 SliverList.separated(
                   itemCount: 50,
                   itemBuilder: (context, index) {
-                    return Tweet(
+                    return TweetItem(
                       onTap: () {
                         //TODO: implement this method
                       },
