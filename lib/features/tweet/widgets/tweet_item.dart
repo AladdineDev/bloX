@@ -19,7 +19,7 @@ class TweetItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final postContent = post.content ?? "";
     final timestamp = post.timestamp ?? DateTime.now();
-    final timeAgo = timeago.format(timestamp);
+    final timeAgo = timeago.format(timestamp, locale: 'en_short');
     return InkWell(
       onTap: onTap,
       child: Padding(

@@ -70,6 +70,7 @@ class _TweetListState extends State<TweetList> {
               ),
               BlocBuilder<PostBloc, PostState>(
                 builder: (context, state) {
+                  final posts = state.posts;
                   return switch (state.status) {
                     PostStatus.progressFetchingPostList =>
                       const SliverToBoxAdapter(
@@ -84,11 +85,11 @@ class _TweetListState extends State<TweetList> {
                         ),
                       ),
                     _ => SliverList.separated(
-                        itemCount: state.posts.length < _fetchLimit
-                            ? state.posts.length
-                            : state.posts.length + 1,
+                        itemCount: posts.length < _fetchLimit
+                            ? posts.length
+                            : posts.length + 1,
                         itemBuilder: (context, index) {
-                          if (index >= state.posts.length) {
+                          if (index >= posts.length) {
                             return const SizedBox(
                               height: 60,
                               width: double.maxFinite,
@@ -96,8 +97,20 @@ class _TweetListState extends State<TweetList> {
                             );
                           }
                           return TweetItem(
-                            post: state.posts[index],
+                            post: posts[index],
                             onTap: () {
+                              final postId = posts[index].id;
+                              if (postId == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      "Post unavailable",
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
+                              context.postBloc.add(GetOnePost(postId));
                               TweetDetailScreenRoute().push(context);
                               //TODO: implement this method
                             },
