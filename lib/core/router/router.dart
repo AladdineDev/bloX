@@ -27,10 +27,9 @@ class AppRouter {
 
   final router = GoRouter(
     routes: $appRoutes,
-    initialLocation: '/onboarding',
+    initialLocation: '/tweet-detail',
   );
 }
-
 
 @TypedGoRoute<OnboardingScreenRoute>(path: '/onboarding')
 @immutable
@@ -50,7 +49,9 @@ class SignupScreenRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return SignupScreen(step: step,);
+    return SignupScreen(
+      step: step,
+    );
   }
 }
 
