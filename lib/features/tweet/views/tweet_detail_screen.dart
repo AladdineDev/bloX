@@ -1,5 +1,6 @@
 import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/features/tweet/bloc/tweet_media_bloc/tweet_media_bloc.dart';
+import 'package:blox/features/tweet/models/post.dart';
 import 'package:blox/features/tweet/views/tweet_detail_reply_bottom_sheet.dart';
 import 'package:blox/features/tweet/widgets/tweet_item.dart';
 import 'package:blox/features/tweet/widgets/tweet_detail.dart';
@@ -46,6 +47,11 @@ class _TweetDetailScreenState extends State<TweetDetailScreen> {
                   itemCount: 50,
                   itemBuilder: (context, index) {
                     return TweetItem(
+                      post: const Post(
+                        id: null,
+                        userId: null,
+                        content: "Hey",
+                      ),
                       onTap: () {
                         //TODO: implement this method
                       },

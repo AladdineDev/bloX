@@ -1,15 +1,22 @@
 import 'package:blox/core/common/widgets/profile_picture.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
+import 'package:blox/features/tweet/models/post.dart';
 import 'package:blox/features/tweet/widgets/tweet_bottom_button_bar.dart';
 import 'package:flutter/material.dart';
 
 class TweetItem extends StatelessWidget {
-  const TweetItem({super.key, required this.onTap});
+  const TweetItem({
+    super.key,
+    required this.post,
+    required this.onTap,
+  });
 
+  final Post post;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final postContent = post.content ?? "";
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -60,7 +67,7 @@ class TweetItem extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Expanded(child: Text("Blablablabla bla blabla. " * 20)),
+                      Expanded(child: Text(postContent)),
                     ],
                   ),
                   const SizedBox(height: 8),

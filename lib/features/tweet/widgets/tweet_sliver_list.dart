@@ -96,6 +96,7 @@ class _TweetListViewState extends State<TweetListView> {
                             );
                           }
                           return TweetItem(
+                            post: state.posts[index],
                             onTap: () {
                               TweetDetailScreenRoute().push(context);
                               //TODO: implement this method
