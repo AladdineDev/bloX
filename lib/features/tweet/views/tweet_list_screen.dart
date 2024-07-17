@@ -1,9 +1,9 @@
 import 'package:blox/core/common/widgets/my_sliver_app_bar.dart';
 import 'package:blox/core/common/widgets/my_drawer.dart';
 import 'package:blox/core/router/router.dart';
-import 'package:blox/features/tweet/widgets/tweet_item.dart';
 import 'package:blox/features/tweet/widgets/tweet_list_tab_bar.dart';
 import 'package:blox/features/tweet/widgets/tweet_list_tabs.dart';
+import 'package:blox/features/tweet/widgets/tweet_sliver_list.dart';
 import 'package:flutter/material.dart';
 
 class TweetListScreen extends StatelessWidget {
@@ -38,32 +38,7 @@ class TweetListScreen extends StatelessWidget {
               children: TweetListTabs.values.map((tab) {
                 return Builder(
                   builder: (BuildContext context) {
-                    return CustomScrollView(
-                      key: PageStorageKey<String>(tab.name),
-                      physics: const ClampingScrollPhysics(),
-                      slivers: <Widget>[
-                        SliverOverlapInjector(
-                          handle:
-                              NestedScrollView.sliverOverlapAbsorberHandleFor(
-                            context,
-                          ),
-                        ),
-                        SliverList.separated(
-                          itemCount: 50,
-                          itemBuilder: (context, index) {
-                            return TweetItem(
-                              onTap: () {
-                                TweetDetailScreenRoute().push(context);
-                                //TODO: implement this method
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return const Divider();
-                          },
-                        ),
-                      ],
-                    );
+                    return TweetListView(tab: tab);
                   },
                 );
               }).toList(),

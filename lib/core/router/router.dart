@@ -9,9 +9,7 @@ import 'package:blox/features/tweet/views/tweet_post_video_viewer.dart';
 import 'package:blox/features/webview/views/webview_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:blox/features/auth/views/login_screen.dart';
 import 'package:blox/features/profil/views/profil_screen.dart';
-import 'package:blox/features/webview/views/webview_screen.dart';
 import 'package:blox/features/edite_profile/views/edite_profile_screen.dart';
 
 part 'router.g.dart';
@@ -27,7 +25,7 @@ class AppRouter {
 
   final router = GoRouter(
     routes: $appRoutes,
-    initialLocation: '/tweet-detail',
+    initialLocation: '/tweets',
   );
 }
 

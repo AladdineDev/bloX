@@ -16,12 +16,12 @@ class Post extends Equatable {
   });
 
   final PostId? id;
-  final UserId userId;
-  final String content;
+  final UserId? userId;
+  final String? content;
   final String? mediaUrl;
   final DateTime? timestamp;
-  final List<UserId> likes;
-  final List<Post> comments;
+  final List<UserId>? likes;
+  final List<Post>? comments;
   final PostId? tweetParentId;
 
   @override
@@ -46,7 +46,7 @@ class Post extends Equatable {
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['timestamp']),
       likes: List<UserId>.from(json['likes'] ?? []),
-      comments: (json['comments'] as List<dynamic>)
+      comments: (json['comments'] as List<dynamic>? ?? [])
           .map((e) => Post.fromJson(e))
           .toList(),
       tweetParentId: json['parentId'],
@@ -61,7 +61,7 @@ class Post extends Equatable {
       'mediaUrl': mediaUrl,
       'timestamp': timestamp?.millisecondsSinceEpoch,
       'likes': likes,
-      'comments': comments.map((e) => e.toJson()).toList(),
+      'comments': comments?.map((e) => e.toJson()).toList(),
       'parentId': tweetParentId,
     };
   }
