@@ -10,9 +10,13 @@ class Post extends Equatable {
     required this.content,
     this.mediaUrl,
     this.timestamp,
+    this.views = const [],
     this.likes = const [],
     this.comments = const [],
-    this.tweetParentId,
+    this.reposts = const [],
+    this.quotes = const [],
+    this.bookmarks = const [],
+    this.parentId,
   });
 
   final PostId? id;
@@ -20,9 +24,13 @@ class Post extends Equatable {
   final String? content;
   final String? mediaUrl;
   final DateTime? timestamp;
+  final List<UserId>? views;
   final List<UserId>? likes;
-  final List<Post>? comments;
-  final PostId? tweetParentId;
+  final List<PostId>? comments;
+  final List<PostId>? reposts;
+  final List<PostId>? quotes;
+  final List<UserId>? bookmarks;
+  final PostId? parentId;
 
   @override
   List<Object?> get props => [
@@ -31,9 +39,13 @@ class Post extends Equatable {
         content,
         mediaUrl,
         timestamp,
+        views,
         likes,
         comments,
-        tweetParentId
+        reposts,
+        quotes,
+        bookmarks,
+        parentId
       ];
 
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -45,11 +57,13 @@ class Post extends Equatable {
       timestamp: json['timestamp'] == null
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['timestamp']),
+      views: List<UserId>.from(json['views'] ?? []),
       likes: List<UserId>.from(json['likes'] ?? []),
-      comments: (json['comments'] as List<dynamic>? ?? [])
-          .map((e) => Post.fromJson(e))
-          .toList(),
-      tweetParentId: json['parentId'],
+      comments: List<PostId>.from(json['comments'] ?? []),
+      reposts: List<PostId>.from(json['reposts'] ?? []),
+      quotes: List<PostId>.from(json['quotes'] ?? []),
+      bookmarks: List<UserId>.from(json['bookmarks'] ?? []),
+      parentId: json['parentId'],
     );
   }
 
@@ -60,9 +74,13 @@ class Post extends Equatable {
       'content': content,
       'mediaUrl': mediaUrl,
       'timestamp': timestamp?.millisecondsSinceEpoch,
+      'views': views,
       'likes': likes,
-      'comments': comments?.map((e) => e.toJson()).toList(),
-      'parentId': tweetParentId,
+      'comments': comments,
+      'reposts': reposts,
+      'quotes': quotes,
+      'bookmarks': bookmarks,
+      'parentId': parentId,
     };
   }
 
@@ -72,8 +90,12 @@ class Post extends Equatable {
     String? content,
     String? mediaUrl,
     DateTime? timestamp,
+    List<UserId>? views,
     List<UserId>? likes,
-    List<Post>? comments,
+    List<PostId>? comments,
+    List<PostId>? reposts,
+    List<PostId>? quotes,
+    List<UserId>? bookmarks,
     PostId? parentId,
   }) {
     return Post(
@@ -82,9 +104,13 @@ class Post extends Equatable {
       content: content ?? this.content,
       mediaUrl: mediaUrl ?? this.mediaUrl,
       timestamp: timestamp ?? this.timestamp,
+      views: views ?? this.views,
       likes: likes ?? this.likes,
       comments: comments ?? this.comments,
-      tweetParentId: parentId ?? tweetParentId,
+      reposts: reposts ?? this.reposts,
+      quotes: quotes ?? this.quotes,
+      bookmarks: bookmarks ?? this.bookmarks,
+      parentId: parentId ?? parentId,
     );
   }
 }
