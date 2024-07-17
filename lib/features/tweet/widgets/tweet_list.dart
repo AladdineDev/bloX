@@ -8,18 +8,18 @@ import 'package:blox/features/tweet/widgets/tweet_list_tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TweetListView extends StatefulWidget {
-  const TweetListView({super.key, required this.tab});
+class TweetList extends StatefulWidget {
+  const TweetList({super.key, required this.tab});
 
   final TweetListTabs tab;
 
   @override
-  State<TweetListView> createState() => _TweetListViewState();
+  State<TweetList> createState() => _TweetListState();
 }
 
 class TweetListTab {}
 
-class _TweetListViewState extends State<TweetListView> {
+class _TweetListState extends State<TweetList> {
   final _scrollController = ScrollController();
   static const _pageSize = 20;
   int _fetchLimit = _pageSize;

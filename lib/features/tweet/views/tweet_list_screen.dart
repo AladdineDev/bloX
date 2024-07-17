@@ -3,7 +3,7 @@ import 'package:blox/core/common/widgets/my_drawer.dart';
 import 'package:blox/core/router/router.dart';
 import 'package:blox/features/tweet/widgets/tweet_list_tab_bar.dart';
 import 'package:blox/features/tweet/widgets/tweet_list_tabs.dart';
-import 'package:blox/features/tweet/widgets/tweet_sliver_list.dart';
+import 'package:blox/features/tweet/widgets/tweet_list.dart';
 import 'package:flutter/material.dart';
 
 class TweetListScreen extends StatelessWidget {
@@ -38,7 +38,7 @@ class TweetListScreen extends StatelessWidget {
               children: TweetListTabs.values.map((tab) {
                 return Builder(
                   builder: (BuildContext context) {
-                    return TweetListView(tab: tab);
+                    return TweetList(tab: tab);
                   },
                 );
               }).toList(),
