@@ -8,8 +8,8 @@ final class GetOnePost extends PostEvent {
   final PostId postId;
 }
 
-final class GetAllPosts extends PostEvent {
-  GetAllPosts({this.limit = 20});
+final class GetForYouPosts extends PostEvent {
+  GetForYouPosts({this.limit = 20});
 
   final int limit;
 }
@@ -29,4 +29,14 @@ final class UpdatePost extends PostEvent {
 class DeletePost extends PostEvent {
   DeletePost(this.postId);
   final PostId postId;
+}
+
+final class GetFollowingPosts extends PostEvent {
+  GetFollowingPosts({
+    this.limit = 20,
+    this.followingIds = const [],
+  });
+
+  final int limit;
+  final List<UserId> followingIds;
 }

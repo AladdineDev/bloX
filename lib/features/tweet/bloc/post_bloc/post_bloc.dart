@@ -1,4 +1,5 @@
 import 'package:blox/core/exceptions/app_exception.dart';
+import 'package:blox/features/auth/models/user.dart';
 import 'package:blox/features/tweet/models/post.dart';
 import 'package:blox/features/tweet/repositories/post_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -10,10 +11,11 @@ part 'post_state.dart';
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({required this.postRepository}) : super(const PostState()) {
     on<CreatePost>(_onCreatePost);
-    on<GetAllPosts>(_onGetAllPosts);
+    on<GetForYouPosts>(_onGetForYouPosts);
     on<GetOnePost>(_onGetOnePost);
     on<UpdatePost>(_onUpdatePost);
     on<DeletePost>(_onDeletePost);
+    on<GetFollowingPosts>(_onGetFollowingPosts);
   }
 
   final PostRepository postRepository;
@@ -43,34 +45,71 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
-  Future<void> _onGetAllPosts(
-    GetAllPosts event,
+  Future<void> _onGetForYouPosts(
+    GetForYouPosts event,
     Emitter<PostState> emit,
   ) async {
-    if (state.hasReachedMax) return;
-    if (state.posts.length < event.limit) {
-      emit(state.copyWith(hasReachedMax: true));
+    if (state.forYouHasReachedMax) return;
+    if (state.forYouPosts.length < event.limit) {
+      emit(state.copyWith(forYouHasReachedMax: true));
     }
     try {
       final postsStream = postRepository.getPosts(limit: event.limit);
       return emit.forEach(postsStream, onData: (posts) {
         return state.copyWith(
-          status: PostStatus.successFetchingPostList,
-          posts: posts,
-          hasReachedMax: false,
+          status: PostStatus.successFetchingForYouPostList,
+          forYouPosts: posts,
+          forYouHasReachedMax: false,
         );
       });
     } on AppException catch (e) {
       emit(
         state.copyWith(
-          status: PostStatus.errorFetchingPostList,
+          status: PostStatus.errorFetchingForYouPostList,
           error: e,
         ),
       );
     } catch (e) {
       emit(
         state.copyWith(
-          status: PostStatus.errorFetchingPostList,
+          status: PostStatus.errorFetchingForYouPostList,
+          error: const UnknownException(),
+        ),
+      );
+    }
+  }
+
+  Future<void> _onGetFollowingPosts(
+    GetFollowingPosts event,
+    Emitter<PostState> emit,
+  ) async {
+    if (state.followingHasReachedMax) return;
+    if (state.followingPosts.length < event.limit) {
+      emit(state.copyWith(followingHasReachedMax: true));
+    }
+    try {
+      final postsStream = postRepository.getPosts(
+        limit: event.limit,
+        followingIds: event.followingIds,
+      );
+      return emit.forEach(postsStream, onData: (posts) {
+        return state.copyWith(
+          status: PostStatus.successFetchingFollowingPostList,
+          followingPosts: posts,
+          followingHasReachedMax: false,
+        );
+      });
+    } on AppException catch (e) {
+      emit(
+        state.copyWith(
+          status: PostStatus.errorFetchingFollowingPostList,
+          error: e,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: PostStatus.errorFetchingFollowingPostList,
           error: const UnknownException(),
         ),
       );

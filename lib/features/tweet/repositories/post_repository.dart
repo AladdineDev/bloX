@@ -15,9 +15,15 @@ class PostRepository {
     }
   }
 
-  Stream<List<Post>> getPosts({int limit = 20}) {
+  Stream<List<Post>> getPosts({
+    int limit = 20,
+    List<String>? followingIds,
+  }) {
     try {
-      return remoteDataSource.getPosts(limit: limit);
+      return remoteDataSource.getPosts(
+        limit: limit,
+        followingIds: followingIds,
+      );
     } catch (e) {
       throw const FetchPostListException();
     }
