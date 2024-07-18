@@ -1,4 +1,3 @@
-import 'package:blox/core/common/widgets/button.dart';
 import 'package:blox/core/common/widgets/divider.dart';
 import 'package:blox/core/router/router.dart';
 import 'package:blox/features/auth/views/login_screen.dart';
@@ -6,7 +5,6 @@ import 'package:blox/features/auth/views/signup_screen.dart';
 import 'package:blox/features/auth/widgets/x_header.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({super.key});
@@ -27,21 +25,23 @@ class OnBoardingScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.displaySmall,
               ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-/*                  Button(
-                    "Continue with Google",
-                    leading: Image.asset(
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    label: const Text("Continue with Google"),
+                    icon: Image.asset(
                       './assets/images/google.png',
                       height: 20,
                     ),
                   ),
-                  const TextDivider("or"),*/
-                  Button(
-                      "Create account",
-                      onPressed: () {
-                        const SignupScreenRoute(step: SignupStep.form).push(context);
-                      },
+                  const TextDivider("or"),
+                  ElevatedButton(
+                    child: const Text("Create account"),
+                    onPressed: () {
+                      const SignupScreenRoute(step: SignupStep.form)
+                          .push(context);
+                    },
                   ),
                   const SizedBox(height: 24),
                   RichText(
@@ -104,7 +104,8 @@ class OnBoardingScreen extends StatelessWidget {
                           style: const TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              const LoginScreenRoute(step: LoginStep.login).push(context);
+                              const LoginScreenRoute(step: LoginStep.login)
+                                  .push(context);
                             },
                         ),
                       ],
