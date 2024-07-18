@@ -11,12 +11,6 @@ enum PostStatus {
   progressFetchingFollowingPostList,
   successFetchingFollowingPostList,
   errorFetchingFollowingPostList,
-  progressFetchingPost,
-  successFetchingPost,
-  errorFetchingPost,
-  progressFetchingReplyPostList,
-  successFetchingReplyPostList,
-  errorFetchingReplyPostList,
   progressUpdatingPost,
   successUpdatingPost,
   errorUpdatingPost,
@@ -31,7 +25,6 @@ class PostState extends Equatable {
     this.post,
     this.forYouPosts = const [],
     this.followingPosts = const [],
-    this.replyPosts = const [],
     this.error = const UnknownException(),
     this.forYouHasReachedMax = false,
     this.followingHasReachedMax = false,
@@ -42,7 +35,6 @@ class PostState extends Equatable {
   final Post? post;
   final List<Post> forYouPosts;
   final List<Post> followingPosts;
-  final List<Post> replyPosts;
   final AppException error;
   final bool forYouHasReachedMax;
   final bool followingHasReachedMax;
@@ -53,7 +45,6 @@ class PostState extends Equatable {
     Post? post,
     List<Post>? forYouPosts,
     List<Post>? followingPosts,
-    List<Post>? replyPosts,
     AppException? error,
     bool? forYouHasReachedMax,
     bool? followingHasReachedMax,
@@ -65,7 +56,6 @@ class PostState extends Equatable {
       post: post ?? this.post,
       forYouPosts: forYouPosts ?? this.forYouPosts,
       followingPosts: followingPosts ?? this.followingPosts,
-      replyPosts: replyPosts ?? this.replyPosts,
       forYouHasReachedMax: forYouHasReachedMax ?? this.forYouHasReachedMax,
       followingHasReachedMax:
           followingHasReachedMax ?? this.followingHasReachedMax,
@@ -79,7 +69,6 @@ class PostState extends Equatable {
         post,
         forYouPosts,
         followingPosts,
-        replyPosts,
         error,
         forYouHasReachedMax,
         followingHasReachedMax,

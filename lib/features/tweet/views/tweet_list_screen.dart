@@ -15,8 +15,8 @@ class TweetListScreen extends StatefulWidget {
 
 class _TweetListScreenState extends State<TweetListScreen> {
   static const _tweetListTabs = [
-    TweetListType.forYou,
-    TweetListType.following,
+    TweetListTab.forYou,
+    TweetListTab.following,
   ];
   final _scrollController = ScrollController();
 
@@ -38,7 +38,7 @@ class _TweetListScreenState extends State<TweetListScreen> {
                   sliver: MySliverAppBar(
                     bottom: TweetListTabBar(
                       tabs: _tweetListTabs.map((tab) {
-                        return tab.title;
+                        return Text(tab.title);
                       }).toList(),
                     ),
                   ),
@@ -61,7 +61,7 @@ class _TweetListScreenState extends State<TweetListScreen> {
                               context,
                             ),
                           ),
-                          TweetList(tweetListType: tab),
+                          TweetList(tweetListTab: tab),
                         ],
                       ),
                     );

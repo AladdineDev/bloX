@@ -1,7 +1,7 @@
 import 'package:blox/core/common/widgets/dot_separator.dart';
 import 'package:blox/core/common/widgets/profile_picture.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
-import 'package:blox/features/tweet/bloc/post_bloc/post_bloc.dart';
+import 'package:blox/features/tweet/bloc/post_detail_bloc/post_detail_bloc.dart';
 import 'package:blox/features/tweet/widgets/tweet_detail_bottom_button_bar.dart';
 import 'package:blox/features/tweet/widgets/tweet_detail_statisctic_button.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class TweetDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PostBloc, PostState>(
+    return BlocBuilder<PostDetailBloc, PostDetailState>(
       builder: (context, state) {
         final post = state.post;
         final postContent = post?.content ?? "";

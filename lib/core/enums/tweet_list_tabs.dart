@@ -1,20 +1,12 @@
-import 'package:blox/features/tweet/widgets/tweet_list_tab_following.dart';
-import 'package:blox/features/tweet/widgets/tweet_list_tab_for_you.dart';
-import 'package:flutter/material.dart';
-
-enum TweetListType {
+enum TweetListTab {
   forYou(
-    title: Text('For you'),
+    title: 'For you',
   ),
   following(
-    title: Text('Following'),
-  ),
-  reply(
-    title: Text('Reply'),
+    title: 'Following',
   );
 
-  const TweetListType({
-    required this.title,
-  });
-  final Widget title;
+  const TweetListTab({required this.title});
+
+  final String title;
 }

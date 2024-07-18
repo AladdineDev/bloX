@@ -1,24 +1,32 @@
-import 'package:blox/core/enums/tweet_list_tabs.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
+import 'package:blox/features/tweet/bloc/post_detail_bloc/post_detail_bloc.dart';
 import 'package:blox/features/tweet/bloc/tweet_media_bloc/tweet_media_bloc.dart';
+import 'package:blox/features/tweet/models/post.dart';
 import 'package:blox/features/tweet/views/tweet_detail_reply_bottom_sheet.dart';
+import 'package:blox/features/tweet/widgets/tweet_comment_list.dart';
 import 'package:blox/features/tweet/widgets/tweet_detail.dart';
-import 'package:blox/features/tweet/widgets/tweet_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TweetDetailScreen extends StatefulWidget {
-  const TweetDetailScreen({super.key});
+class TweetDetailScreen extends StatelessWidget {
+  const TweetDetailScreen({super.key, required this.postId});
 
-  @override
-  State<TweetDetailScreen> createState() => _TweetDetailScreenState();
-}
+  final PostId postId;
 
-class _TweetDetailScreenState extends State<TweetDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TweetMediaBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => TweetMediaBloc(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              PostDetailBloc(postRepository: context.postRepository)
+                ..add(GetOnePostDetail(postId))
+                ..add(GetReplyPostsDetail(parentPostId: postId)),
+        ),
+      ],
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
@@ -43,7 +51,9 @@ class _TweetDetailScreenState extends State<TweetDetailScreen> {
                     height: context.theme.dividerTheme.thickness,
                   ),
                 ),
-                const TweetList(tweetListType: TweetListType.reply),
+                TweetCommentList(
+                  postId: postId,
+                ),
               ],
             ),
           ),
