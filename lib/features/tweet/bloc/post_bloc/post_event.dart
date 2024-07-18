@@ -28,6 +28,7 @@ final class UpdatePost extends PostEvent {
 
 class DeletePost extends PostEvent {
   DeletePost(this.postId);
+
   final PostId postId;
 }
 
@@ -39,4 +40,14 @@ final class GetFollowingPosts extends PostEvent {
 
   final int limit;
   final List<UserId> followingIds;
+}
+
+final class GetReplyPosts extends PostEvent {
+  GetReplyPosts({
+    this.limit = 10,
+    required this.parentPostId,
+  });
+
+  final int limit;
+  final PostId parentPostId;
 }

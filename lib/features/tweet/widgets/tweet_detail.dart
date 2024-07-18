@@ -19,7 +19,7 @@ class TweetDetail extends StatelessWidget {
       builder: (context, state) {
         final post = state.post;
         final postContent = post?.content ?? "";
-        final postCommentsNumber = post?.comments?.length ?? 0;
+        final postRepliesNumber = post?.replies?.length ?? 0;
         final postRepostsNumber = post?.reposts?.length ?? 0;
         final postQuotesNumber = post?.quotes?.length ?? 0;
         final postLikesNumber = post?.likes?.length ?? 0;

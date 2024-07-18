@@ -10,9 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TweetList extends StatefulWidget {
-  const TweetList({super.key, required this.tab});
+  const TweetList({
+    super.key,
+    required this.tweetListType,
+  });
 
-  final TweetListTabs tab;
+  final TweetListType tweetListType;
 
   @override
   State<TweetList> createState() => _TweetListState();
@@ -40,8 +43,8 @@ class _TweetListState extends State<TweetList> {
   }
 
   void _onScroll() {
-    switch (widget.tab) {
-      case TweetListTabs.forYou:
+    switch (widget.tweetListType) {
+      case TweetListType.forYou:
         final posts = context.postBloc.state.forYouPosts;
         if (_isBottom && posts.length >= _fetchLimit) {
           _fetchLimit += _pageSize;
@@ -49,13 +52,26 @@ class _TweetListState extends State<TweetList> {
         return context.postBloc.add(
           GetForYouPosts(limit: _fetchLimit),
         );
-      case TweetListTabs.following:
+      case TweetListType.following:
         final posts = context.postBloc.state.followingPosts;
         if (_isBottom && posts.length >= _fetchLimit) {
           _fetchLimit += _pageSize;
         }
         return context.postBloc.add(
           GetFollowingPosts(limit: _fetchLimit),
+        );
+      case TweetListType.reply:
+        final posts = context.postBloc.state.replyPosts;
+        final parentPostId = context.postBloc.state.post?.id;
+        if (parentPostId == null) {
+          return; //TODO: display error
+        }
+
+        if (_isBottom && posts.length >= _fetchLimit) {
+          _fetchLimit += _pageSize;
+        }
+        return context.postBloc.add(
+          GetReplyPosts(limit: _fetchLimit, parentPostId: parentPostId),
         );
     }
   }
@@ -71,73 +87,61 @@ class _TweetListState extends State<TweetList> {
   Widget build(BuildContext context) {
     return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
-        return Scrollbar(
-          controller: _scrollController,
-          child: CustomScrollView(
-            key: PageStorageKey<String>(widget.tab.name),
-            physics: const ClampingScrollPhysics(),
-            slivers: <Widget>[
-              SliverOverlapInjector(
-                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                  context,
+        final List<Post> posts;
+        switch (widget.tweetListType) {
+          case TweetListType.forYou:
+            posts = state.forYouPosts;
+            break;
+          case TweetListType.following:
+            posts = state.followingPosts;
+            break;
+          case TweetListType.reply:
+            posts = state.replyPosts;
+        }
+        return switch (state.status) {
+          PostStatus.progressFetchingForYouPostList ||
+          PostStatus.progressFetchingFollowingPostList ||
+          PostStatus.progressFetchingReplyPostList =>
+            const SliverToBoxAdapter(
+              child: Center(
+                child: Spinner.medium(),
+              ),
+            ),
+          PostStatus.errorFetchingForYouPostList ||
+          PostStatus.errorFetchingFollowingPostList ||
+          PostStatus.errorFetchingReplyPostList =>
+            SliverToBoxAdapter(
+              child: Retry(
+                errorMessage: state.error.message,
+                onPressed: () => context.postBloc.add(
+                  GetForYouPosts(),
                 ),
               ),
-              BlocBuilder<PostBloc, PostState>(
-                builder: (context, state) {
-                  final List<Post> posts;
-                  switch (widget.tab) {
-                    case TweetListTabs.forYou:
-                      posts = state.forYouPosts;
-                      break;
-                    case TweetListTabs.following:
-                      posts = state.followingPosts;
-                  }
-                  return switch (state.status) {
-                    PostStatus.progressFetchingForYouPostList =>
-                      const SliverToBoxAdapter(
-                        child: Center(
-                          child: Spinner.medium(),
-                        ),
-                      ),
-                    PostStatus.errorFetchingForYouPostList =>
-                      SliverToBoxAdapter(
-                        child: Retry(
-                          errorMessage: state.error.message,
-                          onPressed: () => context.postBloc.add(
-                            GetForYouPosts(),
-                          ),
-                        ),
-                      ),
-                    _ => SliverList.separated(
-                        itemCount: posts.length < _fetchLimit
-                            ? posts.length
-                            : posts.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index >= posts.length) {
-                            return const SizedBox(
-                              height: 60,
-                              width: double.maxFinite,
-                              child: Spinner.medium(),
-                            );
-                          }
-                          return TweetItem(
-                            post: posts[index],
-                            onTap: () => _onTweetItemTap(
-                              context,
-                              post: posts[index],
-                            ),
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return const Divider();
-                        },
-                      ),
-                  };
-                },
-              ),
-            ],
-          ),
-        );
+            ),
+          _ => SliverList.separated(
+              itemCount:
+                  posts.length < _fetchLimit ? posts.length : posts.length + 1,
+              itemBuilder: (context, index) {
+                if (index >= posts.length) {
+                  return const SizedBox(
+                    height: 60,
+                    width: double.maxFinite,
+                    child: Spinner.medium(),
+                  );
+                }
+                return TweetItem(
+                  post: posts[index],
+                  onTap: () => _onTweetItemTap(
+                    context,
+                    post: posts[index],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
+            ),
+        };
       },
     );
   }
@@ -155,6 +159,9 @@ class _TweetListState extends State<TweetList> {
       return;
     }
     context.postBloc.add(GetOnePost(postId));
+    context.postBloc.add(
+      GetReplyPosts(parentPostId: postId),
+    );
     TweetDetailScreenRoute().push(context);
     //TODO: implement this method
   }

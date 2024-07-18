@@ -16,6 +16,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<UpdatePost>(_onUpdatePost);
     on<DeletePost>(_onDeletePost);
     on<GetFollowingPosts>(_onGetFollowingPosts);
+    on<GetReplyPosts>(_onGetReplyPosts);
   }
 
   final PostRepository postRepository;
@@ -110,6 +111,43 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       emit(
         state.copyWith(
           status: PostStatus.errorFetchingFollowingPostList,
+          error: const UnknownException(),
+        ),
+      );
+    }
+  }
+
+  Future<void> _onGetReplyPosts(
+    GetReplyPosts event,
+    Emitter<PostState> emit,
+  ) async {
+    if (state.replyHasReachedMax) return;
+    if (state.replyPosts.length < event.limit) {
+      emit(state.copyWith(replyHasReachedMax: true));
+    }
+    try {
+      final postsStream = postRepository.getPosts(
+        limit: event.limit,
+        parentPostId: event.parentPostId,
+      );
+      return emit.forEach(postsStream, onData: (posts) {
+        return state.copyWith(
+          status: PostStatus.successFetchingReplyPostList,
+          replyPosts: posts,
+          replyHasReachedMax: false,
+        );
+      });
+    } on AppException catch (e) {
+      emit(
+        state.copyWith(
+          status: PostStatus.errorFetchingReplyPostList,
+          error: e,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: PostStatus.errorFetchingReplyPostList,
           error: const UnknownException(),
         ),
       );

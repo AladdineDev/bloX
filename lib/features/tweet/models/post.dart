@@ -13,11 +13,11 @@ class Post extends Equatable {
     this.timestamp,
     this.views = const [],
     this.likes = const [],
-    this.comments = const [],
+    this.replies = const [],
     this.reposts = const [],
     this.quotes = const [],
     this.bookmarks = const [],
-    this.parentId,
+    this.parentPostId,
   });
 
   final PostId? id;
@@ -27,11 +27,11 @@ class Post extends Equatable {
   final DateTime? timestamp;
   final List<UserId>? views;
   final List<UserId>? likes;
-  final List<PostId>? comments;
+  final List<PostId>? replies;
   final List<PostId>? reposts;
   final List<PostId>? quotes;
   final List<UserId>? bookmarks;
-  final PostId? parentId;
+  final PostId? parentPostId;
 
   @override
   List<Object?> get props => [
@@ -42,11 +42,11 @@ class Post extends Equatable {
         timestamp,
         views,
         likes,
-        comments,
+        replies,
         reposts,
         quotes,
         bookmarks,
-        parentId
+        parentPostId
       ];
 
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -60,11 +60,11 @@ class Post extends Equatable {
           : (json['timestamp'] as Timestamp).toDate(),
       views: List<UserId>.from(json['views'] ?? []),
       likes: List<UserId>.from(json['likes'] ?? []),
-      comments: List<PostId>.from(json['comments'] ?? []),
+      replies: List<PostId>.from(json['replies'] ?? []),
       reposts: List<PostId>.from(json['reposts'] ?? []),
       quotes: List<PostId>.from(json['quotes'] ?? []),
       bookmarks: List<UserId>.from(json['bookmarks'] ?? []),
-      parentId: json['parentId'],
+      parentPostId: json['parentPostId'],
     );
   }
 
@@ -77,11 +77,11 @@ class Post extends Equatable {
       'timestamp': timestamp?.millisecondsSinceEpoch,
       'views': views,
       'likes': likes,
-      'comments': comments,
+      'replies': replies,
       'reposts': reposts,
       'quotes': quotes,
       'bookmarks': bookmarks,
-      'parentId': parentId,
+      'parentPostId': parentPostId,
     };
   }
 
@@ -93,11 +93,11 @@ class Post extends Equatable {
     DateTime? timestamp,
     List<UserId>? views,
     List<UserId>? likes,
-    List<PostId>? comments,
+    List<PostId>? replies,
     List<PostId>? reposts,
     List<PostId>? quotes,
     List<UserId>? bookmarks,
-    PostId? parentId,
+    PostId? parentPostId,
   }) {
     return Post(
       id: id ?? this.id,
@@ -107,11 +107,11 @@ class Post extends Equatable {
       timestamp: timestamp ?? this.timestamp,
       views: views ?? this.views,
       likes: likes ?? this.likes,
-      comments: comments ?? this.comments,
+      replies: replies ?? this.replies,
       reposts: reposts ?? this.reposts,
       quotes: quotes ?? this.quotes,
       bookmarks: bookmarks ?? this.bookmarks,
-      parentId: parentId ?? parentId,
+      parentPostId: parentPostId ?? parentPostId,
     );
   }
 }

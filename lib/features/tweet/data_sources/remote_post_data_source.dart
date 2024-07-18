@@ -27,13 +27,20 @@ class RemotePostDataSource extends PostDataSource {
   Stream<List<Post>> getPosts({
     required int limit,
     List<String>? followingIds,
+    PostId? parentPostId,
   }) {
     final postsCollection = _firestore.postsCollection(this);
-    Query<Post> postsQuery;
+    Query<Post> postsQuery = postsCollection;
     if (followingIds != null) {
-      postsQuery = postsCollection.where('userId', whereIn: followingIds);
+      postsQuery = postsQuery.where('userId', whereIn: followingIds);
     }
-    postsQuery = postsCollection.limit(limit);
+    if (parentPostId != null) {
+      postsQuery = postsQuery.where(
+        'parentPostId',
+        isEqualTo: parentPostId,
+      );
+    }
+    postsQuery = postsQuery.limit(limit);
     return postsQuery.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) => doc.data()).toList();
     });

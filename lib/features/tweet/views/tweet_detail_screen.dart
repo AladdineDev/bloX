@@ -1,9 +1,9 @@
+import 'package:blox/core/enums/tweet_list_tabs.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/features/tweet/bloc/tweet_media_bloc/tweet_media_bloc.dart';
-import 'package:blox/features/tweet/models/post.dart';
 import 'package:blox/features/tweet/views/tweet_detail_reply_bottom_sheet.dart';
-import 'package:blox/features/tweet/widgets/tweet_item.dart';
 import 'package:blox/features/tweet/widgets/tweet_detail.dart';
+import 'package:blox/features/tweet/widgets/tweet_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,24 +43,7 @@ class _TweetDetailScreenState extends State<TweetDetailScreen> {
                     height: context.theme.dividerTheme.thickness,
                   ),
                 ),
-                SliverList.separated(
-                  itemCount: 50,
-                  itemBuilder: (context, index) {
-                    return TweetItem(
-                      post: const Post(
-                        id: null,
-                        userId: null,
-                        content: "Hey",
-                      ),
-                      onTap: () {
-                        //TODO: implement this method
-                      },
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Divider();
-                  },
-                ),
+                const TweetList(tweetListType: TweetListType.reply),
               ],
             ),
           ),
