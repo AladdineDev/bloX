@@ -12,7 +12,12 @@
           "package_name": "com.example.blox"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "284801421562-f5jfse043o0nte7n5r0r1nha01a3b6di.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDzfE0ZUNyykhbvGAmSyP5rbXSjAcElWps"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284801421562-f5jfse043o0nte7n5r0r1nha01a3b6di.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "284801421562-e85gp91bf08i2dfchu8tmnlcmf3364vf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.blox"
+              }
+            }
+          ]
         }
       }
     }

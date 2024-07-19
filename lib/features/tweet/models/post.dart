@@ -1,4 +1,4 @@
-import 'package:blox/features/auth/models/user.dart';
+import 'package:blox/features/auth/models/app_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -21,16 +21,16 @@ class Post extends Equatable {
   });
 
   final PostId? id;
-  final UserId? userId;
+  final AppUserId? userId;
   final String? content;
   final String? mediaUrl;
   final DateTime? timestamp;
-  final List<UserId>? views;
-  final List<UserId>? likes;
+  final List<AppUserId>? views;
+  final List<AppUserId>? likes;
   final List<PostId>? replies;
   final List<PostId>? reposts;
   final List<PostId>? quotes;
-  final List<UserId>? bookmarks;
+  final List<AppUserId>? bookmarks;
   final PostId? parentPostId;
 
   @override
@@ -58,12 +58,12 @@ class Post extends Equatable {
       timestamp: json['timestamp'] == null
           ? null
           : (json['timestamp'] as Timestamp).toDate(),
-      views: List<UserId>.from(json['views'] ?? []),
-      likes: List<UserId>.from(json['likes'] ?? []),
+      views: List<AppUserId>.from(json['views'] ?? []),
+      likes: List<AppUserId>.from(json['likes'] ?? []),
       replies: List<PostId>.from(json['replies'] ?? []),
       reposts: List<PostId>.from(json['reposts'] ?? []),
       quotes: List<PostId>.from(json['quotes'] ?? []),
-      bookmarks: List<UserId>.from(json['bookmarks'] ?? []),
+      bookmarks: List<AppUserId>.from(json['bookmarks'] ?? []),
       parentPostId: json['parentPostId'],
     );
   }
@@ -87,16 +87,16 @@ class Post extends Equatable {
 
   Post copyWith({
     PostId? id,
-    UserId? userId,
+    AppUserId? userId,
     String? content,
     String? mediaUrl,
     DateTime? timestamp,
-    List<UserId>? views,
-    List<UserId>? likes,
+    List<AppUserId>? views,
+    List<AppUserId>? likes,
     List<PostId>? replies,
     List<PostId>? reposts,
     List<PostId>? quotes,
-    List<UserId>? bookmarks,
+    List<AppUserId>? bookmarks,
     PostId? parentPostId,
   }) {
     return Post(

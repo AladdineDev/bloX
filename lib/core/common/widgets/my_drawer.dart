@@ -3,6 +3,8 @@ import 'package:blox/core/common/widgets/drawer_number_of_follow.dart';
 import 'package:blox/core/common/widgets/drawer_profile_name_and_username.dart';
 import 'package:blox/core/common/widgets/profile_picture.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
+import 'package:blox/core/router/router.dart';
+import 'package:blox/features/auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -109,6 +111,22 @@ class MyDrawer extends StatelessWidget {
                         },
                         leading: const Icon(Icons.help_outline),
                         title: const Text("Help Center"),
+                      ),
+                      ListTile(
+                        onTap: () {
+                          context.authBloc.add(const AuthSignOut());
+                        },
+                        leading: Icon(
+                          Icons.exit_to_app_outlined,
+                          color: context.colorScheme.error,
+                        ),
+                        title: Text(
+                          "Log out",
+                          style: context.textTheme.bodyMedium?.copyWith(
+                            color: context.colorScheme.error,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ],
                   ),

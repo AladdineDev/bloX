@@ -1,3 +1,4 @@
+import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/features/auth/views/login_screen.dart';
 import 'package:blox/features/auth/views/onboarding_screen.dart';
 import 'package:blox/features/auth/views/signup_screen.dart';
@@ -27,6 +28,15 @@ class AppRouter {
   final router = GoRouter(
     routes: $appRoutes,
     initialLocation: '/onboarding',
+    redirect: (context, state) async {
+      final appUserStream = context.authRepository.getAppUser();
+      final appUser = await appUserStream.first;
+      print("Wesh: $appUser");
+      if (appUser == null) {
+        return '/onboarding';
+      }
+      return null;
+    },
   );
 }
 

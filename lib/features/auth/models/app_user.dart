@@ -1,13 +1,14 @@
 import 'package:equatable/equatable.dart';
 
-typedef UserId = String;
+typedef AppUserId = String;
 
-class User extends Equatable {
-  const User({
+class AppUser extends Equatable {
+  const AppUser({
     required this.id,
     required this.email,
     this.displayName,
-    this.photoUrl,
+    this.photoURL,
+    this.phoneNumber,
     this.username,
     this.profileImageUrl,
     this.bio,
@@ -15,22 +16,24 @@ class User extends Equatable {
     this.following = const [],
   });
 
-  final UserId id;
-  final String email;
+  final AppUserId? id;
+  final String? email;
   final String? displayName;
-  final String? photoUrl;
+  final String? photoURL;
+  final String? phoneNumber;
   final String? username;
   final String? profileImageUrl;
   final String? bio;
-  final List<UserId> followers;
-  final List<UserId> following;
+  final List<AppUserId>? followers;
+  final List<AppUserId>? following;
 
   @override
   List<Object?> get props => [
         id,
         email,
         displayName,
-        photoUrl,
+        photoURL,
+        phoneNumber,
         username,
         profileImageUrl,
         bio,
@@ -38,17 +41,18 @@ class User extends Equatable {
         following,
       ];
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory AppUser.fromJson(Map<String, dynamic> json) {
+    return AppUser(
       id: json['id'],
       email: json['email'],
       displayName: json['displayName'],
-      photoUrl: json['photoUrl'],
+      photoURL: json['photoURL'],
+      phoneNumber: json['phoneNumber'],
       username: json['username'],
       profileImageUrl: json['profileImageUrl'],
       bio: json['bio'],
-      followers: List<UserId>.from(json['followers'] ?? []),
-      following: List<UserId>.from(json['following'] ?? []),
+      followers: List<AppUserId>.from(json['followers'] ?? []),
+      following: List<AppUserId>.from(json['following'] ?? []),
     );
   }
 
@@ -57,7 +61,8 @@ class User extends Equatable {
       if (keepId) 'id': id,
       'email': email,
       'displayName': displayName,
-      'photoUrl': photoUrl,
+      'photoURL': photoURL,
+      'phoneNumber': phoneNumber,
       'username': username,
       'profileImageUrl': profileImageUrl,
       'bio': bio,
@@ -66,22 +71,24 @@ class User extends Equatable {
     };
   }
 
-  User copyWith({
-    UserId? id,
+  AppUser copyWith({
+    AppUserId? id,
     String? email,
     String? displayName,
-    String? photoUrl,
+    String? photoURL,
+    String? phoneNumber,
     String? username,
     String? profileImageUrl,
     String? bio,
-    List<UserId>? followers,
-    List<UserId>? following,
+    List<AppUserId>? followers,
+    List<AppUserId>? following,
   }) {
-    return User(
+    return AppUser(
       id: id ?? this.id,
       email: email ?? this.email,
       displayName: displayName ?? this.displayName,
-      photoUrl: photoUrl ?? this.photoUrl,
+      photoURL: photoURL ?? this.photoURL,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
       username: username ?? this.username,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
       bio: bio ?? this.bio,

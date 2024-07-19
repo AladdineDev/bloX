@@ -39,7 +39,7 @@ final class GetFollowingPosts extends PostEvent {
   });
 
   final int limit;
-  final List<UserId> followingIds;
+  final List<AppUserId> followingIds;
 }
 
 final class GetReplyPosts extends PostEvent {

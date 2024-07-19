@@ -1,5 +1,5 @@
 import 'package:blox/core/exceptions/app_exception.dart';
-import 'package:blox/features/auth/models/user.dart';
+import 'package:blox/features/auth/models/app_user.dart';
 import 'package:blox/features/tweet/models/post.dart';
 import 'package:blox/features/tweet/repositories/post_repository.dart';
 import 'package:equatable/equatable.dart';
