@@ -34,8 +34,8 @@ class RemoteAuthDataSource extends AuthDataSource {
   @override
   Future<void> signOut() async {
     await Future.wait([
-      _firebaseAuth.signOut(),
       _googleSignIn.signOut(),
+      _firebaseAuth.signOut(),
     ]);
   }
 }

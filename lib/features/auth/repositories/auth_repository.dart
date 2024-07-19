@@ -15,15 +15,16 @@ class AuthRepository {
     try {
       await remoteAuthDataSource.signInWithGoogle();
     } catch (e) {
+      //TODO: handle exception
       debugPrint(e.toString());
+      rethrow;
     }
-    //TODO: catch exception
   }
 
   Future<void> signOut() async {
     try {
       await remoteAuthDataSource.signOut();
-      //TODO: catch exception
+      //TODO: handle exception
     } catch (e) {
       debugPrint(e.toString());
     }

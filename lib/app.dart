@@ -44,13 +44,28 @@ class MyApp extends StatelessWidget {
                   ..add(const AuthGetAppUser()),
           ),
         ],
-        child: MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          title: "BloX",
-          routerConfig: AppRouter().router,
-          darkTheme: theme.darkTheme,
-          themeMode: ThemeMode.dark,
-        ),
+        child: Builder(builder: (context) {
+          return BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) {
+              switch (state.status) {
+                case AuthStatus.authenticated:
+                  AppRouter().router.go(TweetListScreenRoute().location);
+                  break;
+                case AuthStatus.unauthenticated:
+                  AppRouter().router.go(OnboardingScreenRoute().location);
+                  break;
+                default:
+              }
+            },
+            child: MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              title: "BloX",
+              routerConfig: AppRouter().router,
+              darkTheme: theme.darkTheme,
+              themeMode: ThemeMode.dark,
+            ),
+          );
+        }),
       ),
     );
   }

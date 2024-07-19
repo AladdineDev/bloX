@@ -3,7 +3,8 @@ part of 'auth_bloc.dart';
 enum AuthStatus {
   initial,
   progress,
-  success,
+  authenticated,
+  unauthenticated,
   failure,
 }
 

@@ -24,62 +24,59 @@ class _TweetListScreenState extends State<TweetListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) => OnboardingScreenRoute().go(context),
-      child: DefaultTabController(
-        length: _tweetListTabs.length,
-        child: Scaffold(
-          drawer: const MyDrawer(),
-          body: SafeArea(
-            child: NestedScrollView(
-              floatHeaderSlivers: true,
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return <Widget>[
-                  SliverOverlapAbsorber(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                      context,
-                    ),
-                    sliver: MySliverAppBar(
-                      bottom: TweetListTabBar(
-                        tabs: _tweetListTabs.map((tab) {
-                          return Text(tab.title);
-                        }).toList(),
-                      ),
+    return DefaultTabController(
+      length: _tweetListTabs.length,
+      child: Scaffold(
+        drawer: const MyDrawer(),
+        body: SafeArea(
+          child: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return <Widget>[
+                SliverOverlapAbsorber(
+                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                    context,
+                  ),
+                  sliver: MySliverAppBar(
+                    bottom: TweetListTabBar(
+                      tabs: _tweetListTabs.map((tab) {
+                        return Text(tab.title);
+                      }).toList(),
                     ),
                   ),
-                ];
-              },
-              body: TabBarView(
-                children: _tweetListTabs.map((tab) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return Scrollbar(
-                        controller: _scrollController,
-                        child: CustomScrollView(
-                          key: PageStorageKey<String>(tab.name),
-                          physics: const ClampingScrollPhysics(),
-                          slivers: <Widget>[
-                            SliverOverlapInjector(
-                              handle: NestedScrollView
-                                  .sliverOverlapAbsorberHandleFor(
-                                context,
-                              ),
+                ),
+              ];
+            },
+            body: TabBarView(
+              children: _tweetListTabs.map((tab) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Scrollbar(
+                      controller: _scrollController,
+                      child: CustomScrollView(
+                        key: PageStorageKey<String>(tab.name),
+                        physics: const ClampingScrollPhysics(),
+                        slivers: <Widget>[
+                          SliverOverlapInjector(
+                            handle:
+                                NestedScrollView.sliverOverlapAbsorberHandleFor(
+                              context,
                             ),
-                            TweetList(tweetListTab: tab),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
-              ),
+                          ),
+                          TweetList(tweetListTab: tab),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => _onFloationgActionButtonPressed(context),
-            child: const Icon(
-              Icons.edit_outlined,
-            ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _onFloationgActionButtonPressed(context),
+          child: const Icon(
+            Icons.edit_outlined,
           ),
         ),
       ),

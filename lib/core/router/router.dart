@@ -28,15 +28,6 @@ class AppRouter {
   final router = GoRouter(
     routes: $appRoutes,
     initialLocation: '/onboarding',
-    redirect: (context, state) async {
-      final appUserStream = context.authRepository.getAppUser();
-      final appUser = await appUserStream.first;
-      print("Wesh: $appUser");
-      if (appUser == null) {
-        return '/onboarding';
-      }
-      return null;
-    },
   );
 }
 

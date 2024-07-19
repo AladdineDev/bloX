@@ -22,10 +22,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(status: AuthStatus.progress));
     final appUserStream = authRepository.getAppUser();
     try {
-      await emit.forEach(appUserStream, onData: (appUser) {
-        print("STATE= $state");
+      return emit.forEach(appUserStream, onData: (appUser) {
         return state.copyWith(
-          status: AuthStatus.success,
+          status: appUser == null
+              ? AuthStatus.unauthenticated
+              : AuthStatus.authenticated,
           appUser: appUser,
         );
       });
@@ -39,7 +40,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(status: AuthStatus.progress));
     try {
       await authRepository.signInWithGoogle();
-      emit(state.copyWith(status: AuthStatus.success));
+      emit(
+        state.copyWith(
+          status: AuthStatus.authenticated,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AuthStatus.failure));
     }
@@ -51,7 +56,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await authRepository.signOut();
       emit(
         state.copyWith(
-          status: AuthStatus.success,
+          status: AuthStatus.unauthenticated,
           appUser: null,
         ),
       );
