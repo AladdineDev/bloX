@@ -1,25 +1,27 @@
 import 'package:blox/core/common/widgets/retry.dart';
 import 'package:blox/core/common/widgets/spinner.dart';
-import 'package:blox/core/enums/tweet_list_tabs.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/core/router/router.dart';
 import 'package:blox/features/tweet/bloc/post_bloc/post_bloc.dart';
+import 'package:blox/features/tweet/bloc/post_detail_bloc/post_detail_bloc.dart';
 import 'package:blox/features/tweet/models/post.dart';
 import 'package:blox/features/tweet/widgets/tweet_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TweetList extends StatefulWidget {
-  const TweetList({super.key, required this.tweetListTab, this.postId});
+class TweetCommentList extends StatefulWidget {
+  const TweetCommentList({
+    super.key,
+    this.postId,
+  });
 
-  final TweetListTab tweetListTab;
   final PostId? postId;
 
   @override
-  State<TweetList> createState() => _TweetListState();
+  State<TweetCommentList> createState() => _TweetListState();
 }
 
-class _TweetListState extends State<TweetList> {
+class _TweetListState extends State<TweetCommentList> {
   final _scrollController = ScrollController();
   static const _pageSize = 20;
   int _fetchLimit = _pageSize;
@@ -39,24 +41,17 @@ class _TweetListState extends State<TweetList> {
   }
 
   void _onScroll() {
-    switch (widget.tweetListTab) {
-      case TweetListTab.forYou:
-        final posts = context.postBloc.state.forYouPosts;
-        if (_isBottom && posts.length >= _fetchLimit) {
-          _fetchLimit += _pageSize;
-        }
-        return context.postBloc.add(
-          GetForYouPosts(limit: _fetchLimit),
-        );
-      case TweetListTab.following:
-        final posts = context.postBloc.state.followingPosts;
-        if (_isBottom && posts.length >= _fetchLimit) {
-          _fetchLimit += _pageSize;
-        }
-        return context.postBloc.add(
-          GetFollowingPosts(limit: _fetchLimit),
-        );
+    final posts = context.postDetailBloc.state.replyPosts;
+    final parentPostId = widget.postId;
+    if (parentPostId == null) {
+      return; //TODO: display error
     }
+    if (_isBottom && posts.length >= _fetchLimit) {
+      _fetchLimit += _pageSize;
+    }
+    return context.postBloc.add(
+      GetReplyPosts(limit: _fetchLimit, parentPostId: parentPostId),
+    );
   }
 
   bool get _isBottom {
@@ -68,28 +63,17 @@ class _TweetListState extends State<TweetList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PostBloc, PostState>(
+    return BlocBuilder<PostDetailBloc, PostDetailState>(
       builder: (context, state) {
-        final List<Post> posts;
-        switch (widget.tweetListTab) {
-          case TweetListTab.forYou:
-            posts = state.forYouPosts;
-            break;
-          case TweetListTab.following:
-            posts = state.followingPosts;
-            break;
-        }
+        final posts = state.replyPosts;
         return switch (state.status) {
-          PostStatus.progressFetchingForYouPostList ||
-          PostStatus.progressFetchingFollowingPostList =>
+          PostDetailStatus.progressFetchingReplyPostList =>
             const SliverToBoxAdapter(
               child: Center(
                 child: Spinner.medium(),
               ),
             ),
-          PostStatus.errorFetchingForYouPostList ||
-          PostStatus.errorFetchingFollowingPostList =>
-            SliverToBoxAdapter(
+          PostDetailStatus.errorFetchingReplyPostList => SliverToBoxAdapter(
               child: Retry(
                 errorMessage: state.error.message,
                 onPressed: () => context.postBloc.add(

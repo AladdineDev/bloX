@@ -1,3 +1,6 @@
+import 'package:blox/features/auth/data_sources/auth_data_source.dart';
+import 'package:blox/features/auth/data_sources/remote_auth_data_source.dart';
+import 'package:blox/features/auth/models/app_user.dart';
 import 'package:blox/features/tweet/data_sources/post_data_source.dart';
 import 'package:blox/features/tweet/data_sources/remote_post_data_source.dart';
 import 'package:blox/features/tweet/models/post.dart';
@@ -54,6 +57,26 @@ extension PostFirestoreExtension on FirebaseFirestore {
       documentPath: documentPath,
       fromJson: (json) => Post.fromJson(json),
       toJson: (post) => post.toJson(),
+    );
+  }
+}
+
+extension AuthFirestoreExtension on FirebaseFirestore {
+  CollectionReference<AppUser> appUsersCollection(
+    AuthDataSource appUserDataSource,
+  ) {
+    return collectionWithConverter(
+      collectionPath: RemoteAuthDataSource.appUsersCollectionPath,
+      fromJson: (json) => AppUser.fromJson(json),
+      toJson: (appUser) => appUser.toJson(),
+    );
+  }
+
+  DocumentReference<AppUser> appUserDocument({required String documentPath}) {
+    return documentWithConverter(
+      documentPath: documentPath,
+      fromJson: (json) => AppUser.fromJson(json),
+      toJson: (appUser) => appUser.toJson(),
     );
   }
 }

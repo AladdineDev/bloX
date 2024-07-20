@@ -12,7 +12,7 @@ class TweetBottomButtonsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final postCommentsNumber = post.comments?.length ?? 0;
+    final postRepliesNumber = post.replies?.length ?? 0;
     final postRepostsNumber = post.reposts?.length ?? 0;
     final postLikesNumber = post.likes?.length ?? 0;
     final postViewsNumber = post.views?.length ?? 0;
@@ -29,7 +29,7 @@ class TweetBottomButtonsBar extends StatelessWidget {
                     //TODO: implement this function
                   },
                   icon: Icons.chat_bubble_outline_rounded,
-                  number: postCommentsNumber,
+                  number: postRepliesNumber,
                 ),
               ),
               Expanded(

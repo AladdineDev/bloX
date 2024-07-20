@@ -5,6 +5,7 @@ abstract class PostDataSource {
   Stream<List<Post>> getPosts({
     required int limit,
     List<String>? followingIds,
+    PostId? parentPostId,
   });
   Stream<Post?> getPost({required PostId postId});
   Future<void> updatePost({required Post post});

@@ -1,4 +1,7 @@
+import 'package:blox/features/auth/bloc/auth_bloc/auth_bloc.dart';
+import 'package:blox/features/auth/repositories/auth_repository.dart';
 import 'package:blox/features/tweet/bloc/post_bloc/post_bloc.dart';
+import 'package:blox/features/tweet/bloc/post_detail_bloc/post_detail_bloc.dart';
 import 'package:blox/features/tweet/bloc/tweet_media_bloc/tweet_media_bloc.dart';
 import 'package:blox/features/tweet/repositories/post_repository.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +22,9 @@ extension TextExtension on BuildContext {
 extension BlocExtension on BuildContext {
   TweetMediaBloc get tweetMediaBloc => read<TweetMediaBloc>();
   PostBloc get postBloc => read<PostBloc>();
+  AuthBloc get authBloc => read<AuthBloc>();
+  PostDetailBloc get postDetailBloc => read<PostDetailBloc>();
+  AuthRepository get authRepository => read<AuthRepository>();
   PostRepository get postRepository => read<PostRepository>();
 }
 

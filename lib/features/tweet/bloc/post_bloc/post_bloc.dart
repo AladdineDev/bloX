@@ -1,5 +1,5 @@
 import 'package:blox/core/exceptions/app_exception.dart';
-import 'package:blox/features/auth/models/user.dart';
+import 'package:blox/features/auth/models/app_user.dart';
 import 'package:blox/features/tweet/models/post.dart';
 import 'package:blox/features/tweet/repositories/post_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -12,7 +12,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({required this.postRepository}) : super(const PostState()) {
     on<CreatePost>(_onCreatePost);
     on<GetForYouPosts>(_onGetForYouPosts);
-    on<GetOnePost>(_onGetOnePost);
     on<UpdatePost>(_onUpdatePost);
     on<DeletePost>(_onDeletePost);
     on<GetFollowingPosts>(_onGetFollowingPosts);
@@ -110,40 +109,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       emit(
         state.copyWith(
           status: PostStatus.errorFetchingFollowingPostList,
-          error: const UnknownException(),
-        ),
-      );
-    }
-  }
-
-  Future<void> _onGetOnePost(GetOnePost event, Emitter<PostState> emit) async {
-    emit(state.copyWith(status: PostStatus.progressFetchingPost));
-    try {
-      final postId = event.postId;
-      final postStream = postRepository.getPost(postId: postId);
-      return emit.forEach(postStream, onData: (post) {
-        if (post == null) {
-          return state.copyWith(
-            status: PostStatus.successDeletingPost,
-            post: null,
-          );
-        }
-        return state.copyWith(
-          status: PostStatus.successFetchingPost,
-          post: post,
-        );
-      });
-    } on AppException catch (e) {
-      emit(
-        state.copyWith(
-          status: PostStatus.errorFetchingPost,
-          error: e,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: PostStatus.errorFetchingPost,
           error: const UnknownException(),
         ),
       );
