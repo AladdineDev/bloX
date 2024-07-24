@@ -1,14 +1,22 @@
 import 'package:blox/core/extensions/app_user_extension.dart';
+import 'package:blox/core/extensions/firebase_firestore_extension.dart';
 import 'package:blox/features/auth/data_sources/auth_data_source.dart';
 import 'package:blox/features/auth/models/app_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class RemoteAuthDataSource extends AuthDataSource {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn.standard();
+  final _firebaseAuth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+  final _googleSignIn = GoogleSignIn.standard();
 
-  static const appUsersCollectionPath = 'appUsers';
+  static const usersCollectionPath = 'users';
+  static String userDocPath({required AppUserId userId}) {
+    return '$usersCollectionPath/$userId';
+  }
+
+  static const appUsersCollectionPath = 'users';
   static String appUserPath({required AppUserId appUserId}) {
     return '$appUsersCollectionPath/$appUserId';
   }
@@ -28,7 +36,10 @@ class RemoteAuthDataSource extends AuthDataSource {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    await _firebaseAuth.signInWithCredential(credential);
+    final userCredential = await _firebaseAuth.signInWithCredential(credential);
+    final appUser = userCredential.user!.toAppUser;
+    print("appUser: $appUser");
+    await _checkAndCreateUser(appUser);
   }
 
   @override
@@ -37,5 +48,14 @@ class RemoteAuthDataSource extends AuthDataSource {
       _googleSignIn.signOut(),
       _firebaseAuth.signOut(),
     ]);
+  }
+
+  Future<void> _checkAndCreateUser(AppUser user) async {
+    final userDoc = await _firestore
+        .appUserDocument(documentPath: userDocPath(userId: user.id!))
+        .get();
+    if (!userDoc.exists) {
+      await _firestore.appUsersCollection().doc(user.id).set(user);
+    }
   }
 }
