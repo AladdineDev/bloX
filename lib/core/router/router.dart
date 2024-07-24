@@ -1,6 +1,8 @@
+import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/features/auth/views/login_screen.dart';
 import 'package:blox/features/auth/views/onboarding_screen.dart';
 import 'package:blox/features/auth/views/signup_screen.dart';
+import 'package:blox/features/tweet/models/post.dart';
 import 'package:blox/features/tweet/views/tweet_detail_screen.dart';
 import 'package:blox/features/tweet/views/tweet_post_image_viewer.dart';
 import 'package:blox/features/tweet/views/tweet_post_screen.dart';
@@ -9,9 +11,7 @@ import 'package:blox/features/tweet/views/tweet_post_video_viewer.dart';
 import 'package:blox/features/webview/views/webview_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:blox/features/auth/views/login_screen.dart';
 import 'package:blox/features/profil/views/profil_screen.dart';
-import 'package:blox/features/webview/views/webview_screen.dart';
 import 'package:blox/features/edite_profile/views/edite_profile_screen.dart';
 
 part 'router.g.dart';
@@ -31,7 +31,6 @@ class AppRouter {
   );
 }
 
-
 @TypedGoRoute<OnboardingScreenRoute>(path: '/onboarding')
 @immutable
 class OnboardingScreenRoute extends GoRouteData {
@@ -50,7 +49,9 @@ class SignupScreenRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return SignupScreen(step: step,);
+    return SignupScreen(
+      step: step,
+    );
   }
 }
 
@@ -63,12 +64,16 @@ class TweetListScreenRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<TweetDetailScreenRoute>(path: '/tweet-detail')
+@TypedGoRoute<TweetDetailScreenRoute>(path: '/tweet-detail/:postId')
 @immutable
 class TweetDetailScreenRoute extends GoRouteData {
+  const TweetDetailScreenRoute({required this.postId});
+
+  final PostId postId;
+
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const TweetDetailScreen();
+    return TweetDetailScreen(postId: postId);
   }
 }
 

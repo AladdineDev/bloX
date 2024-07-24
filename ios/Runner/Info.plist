@@ -51,5 +51,18 @@
 	<string>Allow people to hear you in the space</string>
 	<key>NSCameraUsageDescription</key>
 	<string>To save your edited video, we need permission to access media on your device.</string>
+	<key>GIDClientID</key>
+	<string>284801421562-e85gp91bf08i2dfchu8tmnlcmf3364vf.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.284801421562-e85gp91bf08i2dfchu8tmnlcmf3364vf</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

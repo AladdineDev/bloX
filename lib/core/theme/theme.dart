@@ -146,4 +146,7 @@ final darkTheme = ThemeData.dark().copyWith(
       ),
     ),
   ),
+  bottomSheetTheme: const BottomSheetThemeData(
+    shape: LinearBorder(),
+  ),
 );

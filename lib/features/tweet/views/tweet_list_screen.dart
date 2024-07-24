@@ -1,18 +1,31 @@
 import 'package:blox/core/common/widgets/my_sliver_app_bar.dart';
 import 'package:blox/core/common/widgets/my_drawer.dart';
 import 'package:blox/core/router/router.dart';
-import 'package:blox/features/tweet/widgets/tweet.dart';
+import 'package:blox/features/auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:blox/features/tweet/widgets/tweet_list_tab_bar.dart';
-import 'package:blox/features/tweet/widgets/tweet_list_tabs.dart';
+import 'package:blox/core/enums/tweet_list_tabs.dart';
+import 'package:blox/features/tweet/widgets/tweet_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TweetListScreen extends StatelessWidget {
+class TweetListScreen extends StatefulWidget {
   const TweetListScreen({super.key});
+
+  @override
+  State<TweetListScreen> createState() => _TweetListScreenState();
+}
+
+class _TweetListScreenState extends State<TweetListScreen> {
+  static const _tweetListTabs = [
+    TweetListTab.forYou,
+    TweetListTab.following,
+  ];
+  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: TweetListTabs.values.length,
+      length: _tweetListTabs.length,
       child: Scaffold(
         drawer: const MyDrawer(),
         body: SafeArea(
@@ -26,8 +39,8 @@ class TweetListScreen extends StatelessWidget {
                   ),
                   sliver: MySliverAppBar(
                     bottom: TweetListTabBar(
-                      tabs: TweetListTabs.values.map((tab) {
-                        return tab.title;
+                      tabs: _tweetListTabs.map((tab) {
+                        return Text(tab.title);
                       }).toList(),
                     ),
                   ),
@@ -35,34 +48,24 @@ class TweetListScreen extends StatelessWidget {
               ];
             },
             body: TabBarView(
-              children: TweetListTabs.values.map((tab) {
+              children: _tweetListTabs.map((tab) {
                 return Builder(
                   builder: (BuildContext context) {
-                    return CustomScrollView(
-                      key: PageStorageKey<String>(tab.name),
-                      physics: const ClampingScrollPhysics(),
-                      slivers: <Widget>[
-                        SliverOverlapInjector(
-                          handle:
-                              NestedScrollView.sliverOverlapAbsorberHandleFor(
-                            context,
+                    return Scrollbar(
+                      controller: _scrollController,
+                      child: CustomScrollView(
+                        key: PageStorageKey<String>(tab.name),
+                        physics: const ClampingScrollPhysics(),
+                        slivers: <Widget>[
+                          SliverOverlapInjector(
+                            handle:
+                                NestedScrollView.sliverOverlapAbsorberHandleFor(
+                              context,
+                            ),
                           ),
-                        ),
-                        SliverList.separated(
-                          itemCount: 50,
-                          itemBuilder: (context, index) {
-                            return Tweet(
-                              onTap: () {
-                                TweetDetailScreenRoute().push(context);
-                                //TODO: implement this method
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return const Divider();
-                          },
-                        ),
-                      ],
+                          TweetList(tweetListTab: tab),
+                        ],
+                      ),
                     );
                   },
                 );
