@@ -1,16 +1,22 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:blox/core/common/services/NotificationService.dart';
 import 'package:blox/core/common/widgets/input.dart';
 import 'package:blox/core/router/router.dart';
 import 'package:blox/features/auth/widgets/x_header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:scroll_wheel_date_picker/scroll_wheel_date_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 enum SignupStep { form, otp, profilePicture, username, notifications }
 
@@ -32,32 +38,44 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  Timer? _verificationCheckTimer;
+
+  bool isMainBtnEnabled = false;
   String? _emailError;
   DateTime? _selectedDate;
   XFile? _profileImage;
-  bool isMainBtnEnabled = false;
   bool isDatePickerVisible = false;
+  String? _usernameError;
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.step == SignupStep.otp) {
-      // send otp with firebase
-      // FirebaseAuth.instance.currentUser.sendEmailVerification();
-    }
-
-    widget._dateOfBirthFocusNode.addListener(() {
-      if (widget._dateOfBirthFocusNode.hasFocus && !isDatePickerVisible) {
-        setState(() {
-          isDatePickerVisible = true;
+    switch (widget.step) {
+      case SignupStep.form:
+        widget._dateOfBirthFocusNode.addListener(() {
+          if (widget._dateOfBirthFocusNode.hasFocus && !isDatePickerVisible) {
+            setState(() {
+              isDatePickerVisible = true;
+            });
+          }
         });
-      }
-    });
-
-    widget._nameController.addListener(checkFieldsAndSetButtonState);
-    widget._emailController.addListener(checkFieldsAndSetButtonState);
-    widget._dateOfBirthController.addListener(checkFieldsAndSetButtonState);
+        widget._nameController.addListener(checkFieldsAndSetButtonState);
+        widget._emailController.addListener(checkFieldsAndSetButtonState);
+        widget._dateOfBirthController.addListener(checkFieldsAndSetButtonState);
+        break;
+      case SignupStep.otp:
+        _startVerificationCheck();
+        break;
+      case SignupStep.profilePicture:
+        break;
+      case SignupStep.username:
+        widget._usernameController.addListener(checkFieldsAndSetButtonState);
+        break;
+      case SignupStep.notifications:
+        NotificationService.instance.requestPermission();
+        break;
+    }
   }
 
   @override
@@ -65,6 +83,8 @@ class _SignupScreenState extends State<SignupScreen> {
     widget._nameController.removeListener(checkFieldsAndSetButtonState);
     widget._emailController.removeListener(checkFieldsAndSetButtonState);
     widget._dateOfBirthController.removeListener(checkFieldsAndSetButtonState);
+    widget._usernameController.removeListener(checkFieldsAndSetButtonState);
+    _verificationCheckTimer?.cancel();
     super.dispose();
   }
 
@@ -90,15 +110,85 @@ class _SignupScreenState extends State<SignupScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.only(left: 24, right: 24),
             child: SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height -
-                  Scaffold
-                      .of(context)
-                      .appBarMaxHeight!,
+              height: MediaQuery.of(context).size.height -
+                  Scaffold.of(context).appBarMaxHeight!,
               child: IntrinsicHeight(
-                child: _buildCurrentStep(),
+                child: Column(
+                  children: [
+                    _buildCurrentStep(),
+                    const Spacer(flex: 1),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Visibility(
+                          visible: _isStepSkippable(),
+                          child: OutlinedButton(
+                            style: ButtonStyle(
+                              textStyle: WidgetStateProperty.all(
+                                  const TextStyle(color: Colors.white)),
+                            ),
+                            onPressed: _skip,
+                            child: Text(
+                              'Skip for now',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                      color: isMainBtnEnabled
+                                          ? Colors.black
+                                          : Colors.black54,
+                                      fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            SignupScreenRoute(step: _getNextStep()).push(context);
+                          },
+                          child: Text('Skip {DEV}'),
+                        ),
+                        FilledButton(
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                                isMainBtnEnabled ? Colors.white : Colors.grey),
+                          ),
+                          onPressed: _onMainBtnPressed,
+                          child: Text(
+                            widget.step == SignupStep.notifications
+                                ? 'Done'
+                                : 'Next',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                    color: isMainBtnEnabled
+                                        ? Colors.black
+                                        : Colors.black54,
+                                    fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Visibility(
+                      visible: isDatePickerVisible,
+                      child: ScrollWheelDatePicker(
+                        theme: FlatDatePickerTheme(
+                          backgroundColor: Colors.transparent,
+                          overlay: ScrollWheelDatePickerOverlay.holo,
+                          itemTextStyle: defaultItemTextStyle.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                          ),
+                          overlayColor: Colors.white,
+                          overAndUnderCenterOpacity: 0.2,
+                          monthFormat: MonthFormat.threeLetters,
+                        ),
+                        lastDate: DateTime.now().add(const Duration(days: 1)),
+                        onSelectedItemChanged: _onDateSelected,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -116,13 +206,39 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void checkFieldsAndSetButtonState() {
-    final bool fieldsFilled = widget._nameController.text.isNotEmpty &&
-        widget._emailController.text.isNotEmpty &&
-        widget._dateOfBirthController.text.isNotEmpty;
-    final bool isFormStep = widget.step == SignupStep.form;
+    if (widget.step == SignupStep.form) {
+      final bool fieldsFilled = widget._nameController.text.isNotEmpty &&
+          widget._emailController.text.isNotEmpty &&
+          widget._dateOfBirthController.text.isNotEmpty;
+      setState(() {
+        isMainBtnEnabled = fieldsFilled;
+      });
+    }
+    if (widget.step == SignupStep.username) {
+      setState(() {
+        isMainBtnEnabled = widget._usernameController.text.isNotEmpty;
+      });
+    }
+  }
 
-    setState(() {
-      isMainBtnEnabled = fieldsFilled && isFormStep;
+  void _startVerificationCheck() {
+    _verificationCheckTimer =
+        Timer.periodic(const Duration(seconds: 2), (timer) async {
+      var user = FirebaseAuth.instance.currentUser;
+      await user?.reload();
+      user = FirebaseAuth.instance.currentUser;
+      print('User verified : ${user?.emailVerified}');
+      if (user?.emailVerified ?? false) {
+        timer.cancel();
+        setState(() {
+          isMainBtnEnabled = true;
+        });
+        Fluttertoast.showToast(
+          msg: "Email verified!",
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      }
     });
   }
 
@@ -141,25 +257,6 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  void _validateEmail(String? value) async {
-    final QuerySnapshot result = await FirebaseFirestore.instance
-        .collection('users')
-        .where('email', isEqualTo: value)
-        .get();
-
-    if (result.docs.isNotEmpty) {
-      setState(() {
-        _emailError = 'Email is already in use';
-      });
-      return;
-    }
-    if (_emailError != null) {
-      setState(() {
-        _emailError = null;
-      });
-    }
-  }
-
   void _onDateSelected(DateTime date) {
     // format date to 13 December 2021
     final DateFormat formatter = DateFormat('dd MMMM yyyy');
@@ -170,11 +267,21 @@ class _SignupScreenState extends State<SignupScreen> {
     });
   }
 
-  void _onMainBtnPressed() {
+  void _onMainBtnPressed() async {
     if (!isMainBtnEnabled) return;
 
     if (widget.step == SignupStep.form) {
-      // update firebase user data
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: widget._emailController.text,
+        password: 'Password123!',
+      );
+      final user = userCredential.user;
+      print('User: $user');
+      if (user != null) {
+        user.sendEmailVerification();
+        user.updateDisplayName(widget._nameController.text);
+      }
     }
 
     if (widget.step != SignupStep.notifications) {
@@ -205,8 +312,7 @@ class _SignupScreenState extends State<SignupScreen> {
       children: [
         Text(
           'Create your account',
-          style: Theme
-              .of(context)
+          style: Theme.of(context)
               .textTheme
               .headlineLarge
               ?.copyWith(fontWeight: FontWeight.w600),
@@ -245,78 +351,10 @@ class _SignupScreenState extends State<SignupScreen> {
           padding: const EdgeInsets.only(left: 16, right: 54),
           child: Text(
             "This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.",
-            style: Theme
-                .of(context)
+            style: Theme.of(context)
                 .textTheme
                 .bodySmall
                 ?.copyWith(color: Colors.grey),
-          ),
-        ),
-        const Spacer(
-          flex: 1,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Visibility(
-              visible: _isStepSkippable(),
-              child: OutlinedButton(
-                onPressed: _skip,
-                child: Text(
-                  widget.step == SignupStep.notifications
-                      ? 'Done'
-                      : 'Next',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(
-                      color: isMainBtnEnabled
-                          ? Colors.black
-                          : Colors.black54,
-                      fontWeight: FontWeight.w700),
-                ),
-              ),
-            ),
-            OutlinedButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(
-                    isMainBtnEnabled ? Colors.white : Colors.grey),
-              ),
-              onPressed: _onMainBtnPressed,
-              child: Text(
-                widget.step == SignupStep.notifications
-                    ? 'Done'
-                    : 'Next',
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(
-                    color: isMainBtnEnabled
-                        ? Colors.black
-                        : Colors.black54,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-          ],
-        ),
-        Visibility(
-          visible: isDatePickerVisible,
-          child: ScrollWheelDatePicker(
-            theme: FlatDatePickerTheme(
-              backgroundColor: Colors.transparent,
-              overlay: ScrollWheelDatePickerOverlay.holo,
-              itemTextStyle: defaultItemTextStyle.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-              ),
-              overlayColor: Colors.white,
-              overAndUnderCenterOpacity: 0.2,
-              monthFormat: MonthFormat.threeLetters,
-            ),
-            lastDate: DateTime.now().add(const Duration(days: 1)),
-            onSelectedItemChanged: _onDateSelected,
           ),
         ),
       ],
@@ -324,18 +362,186 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Widget _buildOtp() {
-    return const SizedBox();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'We sent you a verification link',
+          style: Theme.of(context)
+              .textTheme
+              .headlineLarge
+              ?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          'Please check your email and click on the link to verify your account.',
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: Colors.grey),
+        ),
+      ],
+    );
   }
 
   Widget _buildProfilePicture() {
-    return const SizedBox();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Pick a profile picture title
+        Text(
+          'Pick a profile picture',
+          style: Theme.of(context)
+              .textTheme
+              .headlineLarge
+              ?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          'Have a favourite selfie? Upload it now.',
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: Colors.grey),
+        ),
+        const SizedBox(height: 40),
+        Center(
+          child: GestureDetector(
+            onTap: _pickAndCropImage,
+            child: _profileImage == null
+                ? DottedBorder(
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(12),
+                    padding: const EdgeInsets.all(6),
+                    color: Colors.blue,
+                    dashPattern: const [8, 4],
+                    child: const ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      child: SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.camera_alt_outlined,
+                                color: Colors.blue, size: 40),
+                            SizedBox(height: 12),
+                            Text(
+                              'Upload',
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.file(
+                      File(_profileImage!.path),
+                      width: 140,
+                      height: 140,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildUsername() {
-    return const SizedBox();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'What should we call you?',
+          style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          'Your @username is unique. You can always change it later.',
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+        ),
+        const SizedBox(height: 20),
+        Input(
+          controller: widget._usernameController,
+          labelText: "Username",
+          keyboardType: TextInputType.text,
+          showCheckMarkWhenValid: true,
+          errorText: _usernameError,
+          debouncedOnChanged: _validateUsername,
+        ),
+      ],
+    );
   }
 
   Widget _buildNotifications() {
     return const SizedBox();
+  }
+
+  void _validateEmail(String? value) async {
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: value)
+        .get();
+
+    if (result.docs.isNotEmpty) {
+      setState(() {
+        _emailError = 'Email is already in use';
+      });
+      return;
+    }
+    if (_emailError != null) {
+      setState(() {
+        _emailError = null;
+      });
+    }
+  }
+
+  void _validateUsername(String username) async {
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: username)
+        .get();
+
+    if (result.docs.isNotEmpty) {
+      setState(() {
+        _usernameError = "This username is already taken. Please try another one.";
+      });
+      return;
+    }
+    if (_usernameError != null) {
+      setState(() {
+        _usernameError = null;
+      });
+    }
+  }
+
+  Future<void> _pickAndCropImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: image.path,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Move and scale',
+            toolbarColor: Colors.black,
+            toolbarWidgetColor: Colors.white,
+          ),
+          IOSUiSettings(
+            title: 'Move and scale',
+          )
+        ],
+      );
+      if (croppedFile != null) {
+        setState(() {
+          _profileImage = XFile(croppedFile.path);
+          isMainBtnEnabled = true;
+        });
+      }
+    }
   }
 }

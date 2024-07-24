@@ -80,7 +80,7 @@ class _InputState extends State<Input> {
         widget.onTap?.call();
       },
       child: Container(
-        constraints: const BoxConstraints(minHeight: 85),
+        constraints: const BoxConstraints(minHeight: 90),
         child: TextFormField(
           focusNode: _focusNode,
           maxLength: widget.maxLength,
