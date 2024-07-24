@@ -3,9 +3,9 @@ import 'package:blox/core/common/widgets/drawer_number_of_follow.dart';
 import 'package:blox/core/common/widgets/drawer_profile_name_and_username.dart';
 import 'package:blox/core/common/widgets/profile_picture.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
-import 'package:blox/core/router/router.dart';
 import 'package:blox/features/auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -22,45 +22,52 @@ class MyDrawer extends StatelessWidget {
             children: [
               Padding(
                 padding: padding,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ProfilePicture.medium(
-                      image: const NetworkImage(
-                        "https://abs.twimg.com/sticky/default_profile_images/default_profile.png",
-                      ),
-                      onPressed: () {
-                        //TODO: implement this function
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    DrawerProfileNameAndUsername(
-                      onTap: () {
-                        //TODO: implement this function
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    OverflowBar(
-                      spacing: 8,
+                child: BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    final user = state.appUser;
+                    final followersNumber = user?.followers?.length ?? 0;
+                    final followingNumber = user?.following?.length ?? 0;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        DrawerNumberOfFollowText(
-                          number: 1,
-                          text: "Following",
+                        ProfilePicture.medium(
+                          image: const NetworkImage(
+                            "https://abs.twimg.com/sticky/default_profile_images/default_profile.png",
+                          ),
+                          onPressed: () {
+                            //TODO: implement this function
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        DrawerProfileNameAndUsername(
                           onTap: () {
                             //TODO: implement this function
                           },
                         ),
-                        DrawerNumberOfFollowText(
-                          number: 314159265,
-                          text: "Followers",
-                          onTap: () {
-                            //TODO: implement this function
-                          },
+                        const SizedBox(height: 12),
+                        OverflowBar(
+                          spacing: 8,
+                          children: [
+                            DrawerNumberOfFollowText(
+                              number: followersNumber,
+                              text: "Following",
+                              onTap: () {
+                                //TODO: implement this function
+                              },
+                            ),
+                            DrawerNumberOfFollowText(
+                              number: followingNumber,
+                              text: "Followers",
+                              onTap: () {
+                                //TODO: implement this function
+                              },
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
               DrawerDivider(padding: padding),

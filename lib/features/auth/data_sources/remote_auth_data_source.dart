@@ -12,17 +12,12 @@ class RemoteAuthDataSource extends AuthDataSource {
   final _googleSignIn = GoogleSignIn.standard();
 
   static const usersCollectionPath = 'users';
-  static String userDocPath({required AppUserId userId}) {
+  static String appUserDocPath({required AppUserId userId}) {
     return '$usersCollectionPath/$userId';
   }
 
-  static const appUsersCollectionPath = 'users';
-  static String appUserPath({required AppUserId appUserId}) {
-    return '$appUsersCollectionPath/$appUserId';
-  }
-
   @override
-  Stream<AppUser?> getAppUser() {
+  Stream<AppUser?> watchAppUser() {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
       return firebaseUser?.toAppUser;
     });
@@ -52,7 +47,7 @@ class RemoteAuthDataSource extends AuthDataSource {
 
   Future<void> _checkAndCreateUser(AppUser user) async {
     final userDoc = await _firestore
-        .appUserDocument(documentPath: userDocPath(userId: user.id!))
+        .appUserDocument(documentPath: appUserDocPath(userId: user.id!))
         .get();
     if (!userDoc.exists) {
       await _firestore.appUsersCollection().doc(user.id).set(user);

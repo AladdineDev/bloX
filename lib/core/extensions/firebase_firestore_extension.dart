@@ -64,7 +64,7 @@ extension PostFirestoreExtension on FirebaseFirestore {
 extension AuthFirestoreExtension on FirebaseFirestore {
   CollectionReference<AppUser> appUsersCollection() {
     return collectionWithConverter(
-      collectionPath: RemoteAuthDataSource.appUsersCollectionPath,
+      collectionPath: RemoteAuthDataSource.usersCollectionPath,
       fromJson: (json) => AppUser.fromJson(json),
       toJson: (appUser) => appUser.toJson(),
     );
