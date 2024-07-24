@@ -1,6 +1,6 @@
 import 'package:blox/core/common/widgets/spinner.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
-import 'package:blox/features/profil/bloc/user_detail_bloc/app_user_bloc.dart';
+import 'package:blox/features/profil/bloc/app_user_detail_bloc/app_user_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
