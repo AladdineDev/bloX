@@ -1,6 +1,6 @@
 import 'package:blox/features/auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:blox/features/auth/repositories/auth_repository.dart';
-import 'package:blox/features/profil/bloc/user_detail_bloc/app_user_bloc.dart';
+import 'package:blox/features/profil/bloc/app_user_detail_bloc/app_user_bloc.dart';
 import 'package:blox/features/profil/repositories/app_user_repository.dart';
 import 'package:blox/features/tweet/bloc/post_bloc/post_bloc.dart';
 import 'package:blox/features/tweet/bloc/post_detail_bloc/post_detail_bloc.dart';
