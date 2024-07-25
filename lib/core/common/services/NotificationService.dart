@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -58,4 +59,10 @@ class NotificationService {
           '[onMessageOpenedApp] Got notification with title: $title and data: $data');
     });
   }
+
+  void openSettings() async {
+    await AwesomeNotifications().showNotificationConfigPage();
+
+  }
+
 }
