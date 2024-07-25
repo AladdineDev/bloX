@@ -7,8 +7,8 @@ class AuthRepository {
 
   final RemoteAuthDataSource remoteAuthDataSource;
 
-  Stream<AppUser?> getAppUser() {
-    return remoteAuthDataSource.getAppUser();
+  Stream<AppUser?> watchAppUser() {
+    return remoteAuthDataSource.watchAppUser();
   }
 
   Future<void> signInWithGoogle() async {

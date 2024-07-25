@@ -12,15 +12,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required this.authRepository}) : super(const AuthState()) {
     on<AuthSignIn>(_onSignInWithGoogle);
     on<AuthSignOut>(_onSignOut);
-    on<AuthGetAppUser>(_onGetAppUser);
+    on<AuthGetAppUser>(_onWatchAppUser);
   }
 
   final AuthRepository authRepository;
 
-  Future<void> _onGetAppUser(
+  Future<void> _onWatchAppUser(
       AuthGetAppUser event, Emitter<AuthState> emit) async {
     emit(state.copyWith(status: AuthStatus.progress));
-    final appUserStream = authRepository.getAppUser();
+    final appUserStream = authRepository.watchAppUser();
     try {
       return emit.forEach(appUserStream, onData: (appUser) {
         return state.copyWith(

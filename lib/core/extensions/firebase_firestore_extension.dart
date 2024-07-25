@@ -44,7 +44,7 @@ extension FirebaseFirestoreExtension on FirebaseFirestore {
 }
 
 extension PostFirestoreExtension on FirebaseFirestore {
-  CollectionReference<Post> postsCollection(PostDataSource postDataSource) {
+  CollectionReference<Post> postsCollection() {
     return collectionWithConverter(
       collectionPath: RemotePostDataSource.postsCollectionPath,
       fromJson: (json) => Post.fromJson(json),
@@ -62,11 +62,9 @@ extension PostFirestoreExtension on FirebaseFirestore {
 }
 
 extension AuthFirestoreExtension on FirebaseFirestore {
-  CollectionReference<AppUser> appUsersCollection(
-    AuthDataSource appUserDataSource,
-  ) {
+  CollectionReference<AppUser> appUsersCollection() {
     return collectionWithConverter(
-      collectionPath: RemoteAuthDataSource.appUsersCollectionPath,
+      collectionPath: RemoteAuthDataSource.usersCollectionPath,
       fromJson: (json) => AppUser.fromJson(json),
       toJson: (appUser) => appUser.toJson(),
     );

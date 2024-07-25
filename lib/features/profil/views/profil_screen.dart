@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/header_section.dart';
 import '../widgets/profile_info.dart';
 
@@ -8,32 +7,29 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return DefaultTabController(
       length: 4,
       child: Scaffold(
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
-             const  SliverToBoxAdapter(
+              SliverToBoxAdapter(
                 child: Column(
                   children: [
                     ProfileHeader(),
-                    SizedBox(height: 30),
-                    ProfileInfo(
-                      name: 'AladdineDev',
-                      handle: '@voilà',
-                      bio: 'blablablabla',
-                    ),
+                    const SizedBox(height: 30),
+                    const ProfileInfo(),
                   ],
                 ),
               ),
               SliverPersistentHeader(
                 delegate: _SliverAppBarDelegate(
-                 const TabBar(
-                    tabs:  [
-                      Tab(text: 'About'),
+                  const TabBar(
+                    tabs: [
+                      Tab(text: 'Post'),
                       Tab(text: 'Tweets'),
-                      Tab(text: 'Tweets & reponses'),
+                      Tab(text: 'Tweets & responses'),
                       Tab(text: 'Médias'),
                     ],
                   ),
