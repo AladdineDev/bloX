@@ -5,10 +5,10 @@ import 'package:blox/core/common/widgets/profile_picture.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/core/router/router.dart';
 import 'package:blox/features/auth/bloc/auth_bloc/auth_bloc.dart';
-import 'package:blox/features/auth/models/app_user.dart';
 import 'package:blox/features/profil/bloc/app_user_detail_bloc/app_user_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -43,7 +43,7 @@ class MyDrawer extends StatelessWidget {
                         const SizedBox(height: 12),
                         DrawerProfileNameAndUsername(
                           onTap: () {
-                            //TODO: implement this function
+                            context.go("/profile");
                           },
                         ),
                         const SizedBox(height: 12),
@@ -74,6 +74,9 @@ class MyDrawer extends StatelessWidget {
               DrawerDivider(padding: padding),
               ListTile(
                 onTap: () => ProfileScreenRoute().push(context),
+                onTap: () {
+                  context.go("/profile");
+                },
                 leading: const Icon(Icons.person_outline),
                 title: const Text("Profile"),
               ),

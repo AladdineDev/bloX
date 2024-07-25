@@ -13,6 +13,8 @@ import 'package:blox/features/tweet/repositories/post_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'features/profil/bloc/app_user_detail_bloc/app_user_bloc.dart';
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => PostBloc(
-              postRepository: context.postRepository,
+              postRepository: context.read<PostRepository>(),
             )
               ..add(GetForYouPosts())
               ..add(GetFollowingPosts(
@@ -48,8 +50,15 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) =>
-                AuthBloc(authRepository: context.authRepository)
-                  ..add(const AuthGetAppUser()),
+            AuthBloc(authRepository: context.read<AuthRepository>())
+              ..add(const AuthGetAppUser()),
+          ),
+          BlocProvider(
+            create: (context) => AppUserBloc(
+              appUserRepository: context.read<AppUserRepository>())
+              ..add(GetOneAppUser(context.read<AuthBloc>().state.appUser!.id!),
+
+            ),
           ),
           BlocProvider(
             create: (context) =>

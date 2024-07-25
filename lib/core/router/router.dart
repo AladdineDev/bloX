@@ -86,7 +86,7 @@ class ProfileScreenRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<EditeProfileScreenRoute>(path: '/edite-profile')
+@TypedGoRoute<EditeProfileScreenRoute>(path: '/edite')
 @immutable
 class EditeProfileScreenRoute extends GoRouteData {
   @override
