@@ -104,8 +104,8 @@ final darkTheme = ThemeData.dark().copyWith(
     ),
     unselectedLabelColor: const Color(0xff7c838b),
   ),
-  dividerTheme: const DividerThemeData(
-    color: Color(0xff7c838b),
+  dividerTheme: DividerThemeData(
+    color: const Color(0xff7c838b).withOpacity(0.5),
     thickness: 0.5,
     space: 0,
   ),

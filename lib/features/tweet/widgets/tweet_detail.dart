@@ -25,9 +25,13 @@ class TweetDetail extends StatelessWidget {
         final postLikesNumber = post?.likes?.length ?? 0;
         final postViewsNumber = post?.views?.length ?? 0;
         final postBookmarksNumber = post?.bookmarks?.length ?? 0;
-        final timestamp = post?.timestamp ?? DateTime.now();
-        final formattedTime = DateFormat('HH:mm').format(timestamp);
-        final formattedDate = DateFormat('d MMM yy').format(timestamp);
+        final timestamp = post?.timestamp;
+        String? formattedTime;
+        String? formattedDate;
+        if (timestamp != null) {
+          formattedTime = DateFormat('HH:mm').format(timestamp);
+          formattedDate = DateFormat('d MMM yy').format(timestamp);
+        }
 
         return Padding(
           padding: const EdgeInsets.only(left: 8, top: 8, right: 8),
@@ -95,20 +99,26 @@ class TweetDetail extends StatelessWidget {
               const SizedBox(height: 2),
               Row(
                 children: [
-                  Text(
-                    formattedTime,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.onSurface,
+                  if (formattedDate != null && formattedTime != null)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          formattedTime,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                            color: context.colorScheme.onSurface,
+                          ),
+                        ),
+                        const DotSeparator(),
+                        Text(
+                          formattedDate,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                            color: context.colorScheme.onSurface,
+                          ),
+                        ),
+                        const DotSeparator(),
+                      ],
                     ),
-                  ),
-                  const DotSeparator(),
-                  Text(
-                    formattedDate,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.onSurface,
-                    ),
-                  ),
-                  const DotSeparator(),
                   TweetDetailStatiscticButton(
                     title: "Views",
                     number: postViewsNumber,

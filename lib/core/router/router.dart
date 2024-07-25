@@ -125,6 +125,10 @@ class WebviewScreenRoute extends GoRouteData {
 @TypedGoRoute<TweetPostScreenRoute>(path: '/new-tweet')
 @immutable
 class TweetPostScreenRoute extends GoRouteData {
+  const TweetPostScreenRoute({this.parentPostId});
+
+  final PostId? parentPostId;
+
   @override
   CustomTransitionPage buildPage(BuildContext context, GoRouterState state) {
     return CustomTransitionPage(
@@ -141,7 +145,7 @@ class TweetPostScreenRoute extends GoRouteData {
           child: child,
         );
       },
-      child: const TweetPostScreen(),
+      child: TweetPostScreen(parentPostId: parentPostId),
     );
   }
 }

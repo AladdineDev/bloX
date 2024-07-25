@@ -1,3 +1,4 @@
+import 'package:blox/core/common/widgets/dot_separator.dart';
 import 'package:blox/core/common/widgets/profile_picture.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/features/tweet/models/post.dart';
@@ -18,8 +19,11 @@ class TweetItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final postContent = post.content ?? "";
-    final timestamp = post.timestamp ?? DateTime.now();
-    final timeAgo = timeago.format(timestamp, locale: 'en_short');
+    final timestamp = post.timestamp;
+    String? timeAgo;
+    if (timestamp != null) {
+      timeAgo = timeago.format(timestamp, locale: 'en_short');
+    }
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -52,20 +56,15 @@ class TweetItem extends StatelessWidget {
                           color: context.colorScheme.onSurface,
                         ),
                       ),
-                      const SizedBox(width: 2),
-                      Text(
-                        '·',
-                        style: context.textTheme.bodyMedium?.copyWith(
-                          color: context.colorScheme.onSurface,
+                      if (timeAgo != null) ...[
+                        const DotSeparator(),
+                        Text(
+                          timeAgo,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                            color: context.colorScheme.onSurface,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 2),
-                      Text(
-                        timeAgo,
-                        style: context.textTheme.bodyMedium?.copyWith(
-                          color: context.colorScheme.onSurface,
-                        ),
-                      ),
+                      ]
                     ],
                   ),
                   Row(

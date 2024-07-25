@@ -8,8 +8,8 @@ final class AuthGetAppUser extends AuthEvent {
   const AuthGetAppUser();
 }
 
-final class AuthSignIn extends AuthEvent {
-  const AuthSignIn();
+final class AuthSignInWithGoogle extends AuthEvent {
+  const AuthSignInWithGoogle();
 }
 
 final class AuthSignOut extends AuthEvent {

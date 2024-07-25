@@ -24,69 +24,71 @@ class _TweetListScreenState extends State<TweetListScreen> {
   final _scrollController = ScrollController();
 
   @override
+  void initState() {
+    context.appUserBloc.add(
+      GetOneAppUser(
+        context.authBloc.state.appUser!.id!,
+      ),
+    );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AppUserBloc(
-        appUserRepository: context.appUserRepository,
-      )..add(
-          GetOneAppUser(
-            context.authBloc.state.appUser!.id!,
-          ),
-        ),
-      child: DefaultTabController(
-        length: _tweetListTabs.length,
-        child: Scaffold(
-          drawer: const MyDrawer(),
-          body: SafeArea(
-            child: NestedScrollView(
-              floatHeaderSlivers: true,
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return <Widget>[
-                  SliverOverlapAbsorber(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                      context,
-                    ),
-                    sliver: MySliverAppBar(
-                      bottom: TweetListTabBar(
-                        tabs: _tweetListTabs.map((tab) {
-                          return Text(tab.title);
-                        }).toList(),
-                      ),
+    return DefaultTabController(
+      length: _tweetListTabs.length,
+      child: Scaffold(
+        drawer: const MyDrawer(),
+        body: SafeArea(
+          child: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return <Widget>[
+                SliverOverlapAbsorber(
+                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                    context,
+                  ),
+                  sliver: MySliverAppBar(
+                    bottom: TweetListTabBar(
+                      tabs: _tweetListTabs.map((tab) {
+                        return Text(tab.title);
+                      }).toList(),
                     ),
                   ),
-                ];
-              },
-              body: TabBarView(
-                children: _tweetListTabs.map((tab) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return Scrollbar(
+                ),
+              ];
+            },
+            body: TabBarView(
+              children: _tweetListTabs.map((tab) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Scrollbar(
+                      controller: _scrollController,
+                      child: CustomScrollView(
                         controller: _scrollController,
-                        child: CustomScrollView(
-                          key: PageStorageKey<String>(tab.name),
-                          physics: const ClampingScrollPhysics(),
-                          slivers: <Widget>[
-                            SliverOverlapInjector(
-                              handle: NestedScrollView
-                                  .sliverOverlapAbsorberHandleFor(
-                                context,
-                              ),
+                        key: PageStorageKey<String>(tab.name),
+                        physics: const ClampingScrollPhysics(),
+                        slivers: <Widget>[
+                          SliverOverlapInjector(
+                            handle:
+                                NestedScrollView.sliverOverlapAbsorberHandleFor(
+                              context,
                             ),
-                            TweetList(tweetListTab: tab),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
-              ),
+                          ),
+                          TweetList(tweetListTab: tab),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => _onFloationgActionButtonPressed(context),
-            child: const Icon(
-              Icons.edit_outlined,
-            ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _onFloationgActionButtonPressed(context),
+          child: const Icon(
+            Icons.edit_outlined,
           ),
         ),
       ),
@@ -94,6 +96,6 @@ class _TweetListScreenState extends State<TweetListScreen> {
   }
 
   void _onFloationgActionButtonPressed(BuildContext context) {
-    TweetPostScreenRoute().push(context);
+    const TweetPostScreenRoute().push(context);
   }
 }

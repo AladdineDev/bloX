@@ -3,6 +3,7 @@ import 'package:blox/core/common/widgets/drawer_number_of_follow.dart';
 import 'package:blox/core/common/widgets/drawer_profile_name_and_username.dart';
 import 'package:blox/core/common/widgets/profile_picture.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
+import 'package:blox/core/router/router.dart';
 import 'package:blox/features/auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:blox/features/profil/bloc/app_user_detail_bloc/app_user_bloc.dart';
 import 'package:flutter/material.dart';
@@ -29,17 +30,15 @@ class MyDrawer extends StatelessWidget {
                     final user = state.appUser;
                     final followersNumber = user?.followers?.length ?? 0;
                     final followingNumber = user?.following?.length ?? 0;
+                    final photoURL = user?.photoURL ??
+                        "https://abs.twimg.com/sticky/default_profile_images/default_profile.png";
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ProfilePicture.medium(
-                          image: const NetworkImage(
-                            "https://abs.twimg.com/sticky/default_profile_images/default_profile.png",
-                          ),
-                          onPressed: () {
-                            //TODO: implement this function
-                          },
+                          image: NetworkImage(photoURL),
+                          onPressed: () => ProfileScreenRoute().push(context),
                         ),
                         const SizedBox(height: 12),
                         DrawerProfileNameAndUsername(
@@ -74,9 +73,7 @@ class MyDrawer extends StatelessWidget {
               ),
               DrawerDivider(padding: padding),
               ListTile(
-                onTap: () {
-                  context.go("/profile");
-                },
+                onTap: () => ProfileScreenRoute().push(context),
                 leading: const Icon(Icons.person_outline),
                 title: const Text("Profile"),
               ),
