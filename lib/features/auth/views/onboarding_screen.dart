@@ -32,7 +32,7 @@ class OnBoardingScreen extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
-                      context.authRepository.signInWithGoogle();
+                      context.authBloc.add(const AuthSignInWithGoogle());
                     },
                     label: const Text("Continue with Google"),
                     icon: Image.asset(

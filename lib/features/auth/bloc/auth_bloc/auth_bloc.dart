@@ -10,7 +10,7 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required this.authRepository}) : super(const AuthState()) {
-    on<AuthSignIn>(_onSignInWithGoogle);
+    on<AuthSignInWithGoogle>(_onSignInWithGoogle);
     on<AuthSignOut>(_onSignOut);
     on<AuthGetAppUser>(_onWatchAppUser);
   }
@@ -36,7 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onSignInWithGoogle(
-      AuthSignIn event, Emitter<AuthState> emit) async {
+      AuthSignInWithGoogle event, Emitter<AuthState> emit) async {
     emit(state.copyWith(status: AuthStatus.progress));
     try {
       await authRepository.signInWithGoogle();
