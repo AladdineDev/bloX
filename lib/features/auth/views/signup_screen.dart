@@ -20,7 +20,7 @@ import 'package:intl/intl.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-enum SignupStep { form, otp, profilePicture, username, notifications, followAccounts }
+enum SignupStep { form, otp, profilePicture, username, notifications }
 
 class SignupScreen extends StatefulWidget {
   final SignupStep step;
@@ -28,7 +28,6 @@ class SignupScreen extends StatefulWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _dateOfBirthController = TextEditingController();
-  final TextEditingController _otpController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
 
   final FocusNode _dateOfBirthFocusNode = FocusNode();
@@ -80,7 +79,7 @@ class _SignupScreenState extends State<SignupScreen> {
           isMainBtnEnabled = true;
         });
         break;
-      case SignupStep.followAccounts:
+      default:
         break;
     }
   }
@@ -146,13 +145,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                             ),
                           ),
-                        ),
-                        FilledButton(
-                          onPressed: () {
-                            SignupScreenRoute(step: _getNextStep()!)
-                                .push(context);
-                          },
-                          child: Text('Skip {DEV}'),
                         ),
                         FilledButton(
                           style: ButtonStyle(
@@ -296,8 +288,9 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     SignupStep? nextStep = _getNextStep();
+    print('nextStep: $nextStep');
     if (nextStep == null) {
-      // TODO: Navigate to tweets
+      TweetListScreenRoute().go(context);
       return;
     }
     SignupScreenRoute(step: nextStep).push(context);
@@ -315,8 +308,8 @@ class _SignupScreenState extends State<SignupScreen> {
         return _buildUsername();
       case SignupStep.notifications:
         return _buildNotifications();
-      case SignupStep.followAccounts:
-        return _buildFollowAccounts();
+      /*case SignupStep.followAccounts:
+        return _buildFollowAccounts();*/
     }
   }
 
@@ -524,9 +517,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 48),
                 ),
-                onPressed: () {
-                  // TODO: Implement notification permission request
-                },
+                onPressed: () => NotificationService.instance.openSettings(),
                 child: const Text('Allow notifications'),
               ),
             ),
@@ -643,6 +634,11 @@ class _SignupScreenState extends State<SignupScreen> {
         ],
       );
       if (croppedFile != null) {
+        setState(() {
+          _profileImage = XFile(croppedFile.path);
+          isMainBtnEnabled = true;
+        });
+
         // TODO: Use repository pattern to run this code
         String filePath = 'profilePictures/${DateTime.now().millisecondsSinceEpoch}_${croppedFile.path.split('/').last}';
         Reference ref = FirebaseStorage.instance.ref().child(filePath);
@@ -658,11 +654,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
         // debug user id
         print('User id: ${user.uid}');
-
-        setState(() {
-          _profileImage = XFile(croppedFile.path);
-          isMainBtnEnabled = true;
-        });
       }
     }
   }
