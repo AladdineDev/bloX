@@ -74,9 +74,6 @@ class MyDrawer extends StatelessWidget {
               DrawerDivider(padding: padding),
               ListTile(
                 onTap: () => ProfileScreenRoute().push(context),
-                onTap: () {
-                  context.go("/profile");
-                },
                 leading: const Icon(Icons.person_outline),
                 title: const Text("Profile"),
               ),
