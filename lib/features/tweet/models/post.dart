@@ -9,7 +9,7 @@ class Post extends Equatable {
     required this.id,
     required this.userId,
     required this.content,
-    this.mediaUrl,
+    this.mediaListUrl = const [],
     this.timestamp,
     this.views = const [],
     this.likes = const [],
@@ -23,7 +23,7 @@ class Post extends Equatable {
   final PostId? id;
   final AppUserId? userId;
   final String? content;
-  final String? mediaUrl;
+  final List<String>? mediaListUrl;
   final DateTime? timestamp;
   final List<AppUserId>? views;
   final List<AppUserId>? likes;
@@ -38,7 +38,7 @@ class Post extends Equatable {
         id,
         userId,
         content,
-        mediaUrl,
+        mediaListUrl,
         timestamp,
         views,
         likes,
@@ -54,10 +54,12 @@ class Post extends Equatable {
       id: json['id'],
       userId: json['userId'],
       content: json['content'],
-      mediaUrl: json['mediaUrl'],
+      mediaListUrl: List<String>.from(json['mediaListUrl'] ?? []),
       timestamp: json['timestamp'] == null
           ? null
-          : (json['timestamp'] as Timestamp).toDate(),
+          : json['timestamp'] is Timestamp
+              ? (json['timestamp'] as Timestamp).toDate()
+              : DateTime.fromMillisecondsSinceEpoch(json['timestamp']),
       views: List<AppUserId>.from(json['views'] ?? []),
       likes: List<AppUserId>.from(json['likes'] ?? []),
       replies: List<PostId>.from(json['replies'] ?? []),
@@ -73,7 +75,7 @@ class Post extends Equatable {
       if (keepId) 'id': id,
       'userId': userId,
       'content': content,
-      'mediaUrl': mediaUrl,
+      'mediaListUrl': mediaListUrl,
       'timestamp': timestamp?.millisecondsSinceEpoch,
       'views': views,
       'likes': likes,
@@ -89,7 +91,7 @@ class Post extends Equatable {
     PostId? id,
     AppUserId? userId,
     String? content,
-    String? mediaUrl,
+    List<String>? mediaListUrl,
     DateTime? timestamp,
     List<AppUserId>? views,
     List<AppUserId>? likes,
@@ -103,7 +105,7 @@ class Post extends Equatable {
       id: id ?? this.id,
       userId: userId ?? this.userId,
       content: content ?? this.content,
-      mediaUrl: mediaUrl ?? this.mediaUrl,
+      mediaListUrl: mediaListUrl ?? this.mediaListUrl,
       timestamp: timestamp ?? this.timestamp,
       views: views ?? this.views,
       likes: likes ?? this.likes,

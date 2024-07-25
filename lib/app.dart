@@ -4,6 +4,7 @@ import 'package:blox/core/theme/theme.dart' as theme;
 import 'package:blox/features/auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:blox/features/auth/data_sources/remote_auth_data_source.dart';
 import 'package:blox/features/auth/repositories/auth_repository.dart';
+import 'package:blox/features/profil/bloc/app_user_detail_bloc/app_user_bloc.dart';
 import 'package:blox/features/profil/data_sources/remote_app_user_data_source.dart';
 import 'package:blox/features/profil/repositories/app_user_repository.dart';
 import 'package:blox/features/tweet/bloc/post_bloc/post_bloc.dart';
@@ -49,6 +50,10 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 AuthBloc(authRepository: context.authRepository)
                   ..add(const AuthGetAppUser()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                AppUserBloc(appUserRepository: context.appUserRepository),
           ),
         ],
         child: Builder(builder: (context) {

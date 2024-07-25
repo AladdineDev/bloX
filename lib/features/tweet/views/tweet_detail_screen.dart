@@ -37,7 +37,7 @@ class TweetDetailScreen extends StatelessWidget {
               child: Divider(),
             ),
           ),
-          bottomSheet: const TweetDetailReplyBottomSheet(),
+          bottomSheet: TweetDetailReplyBottomSheet(postId: postId),
           body: SafeArea(
             child: CustomScrollView(
               physics: const ClampingScrollPhysics(),

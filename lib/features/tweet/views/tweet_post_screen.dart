@@ -1,7 +1,10 @@
 import 'package:blox/core/common/widgets/profile_picture.dart';
+import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/core/extensions/x_file_extension.dart';
 import 'package:blox/core/router/router.dart';
+import 'package:blox/features/tweet/bloc/post_bloc/post_bloc.dart';
 import 'package:blox/features/tweet/bloc/tweet_media_bloc/tweet_media_bloc.dart';
+import 'package:blox/features/tweet/models/post.dart';
 import 'package:blox/features/tweet/widgets/tweet_post_bottom_row.dart';
 import 'package:blox/features/tweet/widgets/tweet_post_image.dart';
 import 'package:blox/features/tweet/widgets/tweet_post_text_field.dart';
@@ -12,11 +15,13 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class TweetPostScreen extends StatefulWidget {
-  const TweetPostScreen({super.key});
+  const TweetPostScreen({super.key, this.parentPostId});
 
   static const postMaxLength = 280;
   static const postMaxLengthBeforeWarning = 260;
   static const maxMediaPicked = 4;
+
+  final PostId? parentPostId;
 
   @override
   State<TweetPostScreen> createState() => _TweetPostScreenState();
@@ -37,60 +42,72 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TweetMediaBloc(),
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: context.pop,
-            icon: const Icon(Icons.close),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: FilledButton(
-                onPressed: enablePostButton ? () {} : null,
-                child: const Text('Post'),
+      child: BlocBuilder<TweetMediaBloc, TweetMediaState>(
+        builder: (context, state) {
+          final mediaList = state.mediaList;
+
+          return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: context.pop,
+                icon: const Icon(Icons.close),
               ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: FilledButton(
+                    onPressed: enablePostButton
+                        ? () {
+                            final post = Post(
+                              id: null,
+                              userId: context.appUserBloc.state.appUser!.id,
+                              parentPostId: widget.parentPostId,
+                              content: _postController.text,
+                            );
+                            context.postBloc.add(CreatePost(post));
+                            context.pop();
+                          }
+                        : null,
+                    child: const Text('Post'),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const ClampingScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+            body: SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      physics: const ClampingScrollPhysics(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
                           children: [
-                            ProfilePicture.medium(
-                              onPressed: () {},
-                              image: const NetworkImage(
-                                "https://abs.twimg.com/sticky/default_profile_images/default_profile.png",
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  const SizedBox(height: 2),
-                                  TweetPostTextField(
-                                    controller: _postController,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        enablePostButton =
-                                            value.trim().isNotEmpty;
-                                      });
-                                    },
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ProfilePicture.medium(
+                                  onPressed: () {},
+                                  image: const NetworkImage(
+                                    "https://abs.twimg.com/sticky/default_profile_images/default_profile.png",
                                   ),
-                                  const SizedBox(height: 16),
-                                  BlocBuilder<TweetMediaBloc, TweetMediaState>(
-                                    builder: (context, state) {
-                                      final mediaList = state.mediaList;
-                                      return GridView.builder(
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 2),
+                                      TweetPostTextField(
+                                        controller: _postController,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            enablePostButton =
+                                                value.trim().isNotEmpty;
+                                          });
+                                        },
+                                      ),
+                                      const SizedBox(height: 16),
+                                      GridView.builder(
                                         physics:
                                             const NeverScrollableScrollPhysics(),
                                         shrinkWrap: true,
@@ -134,27 +151,27 @@ class _TweetPostScreenState extends State<TweetPostScreen> {
                                           }
                                           return const SizedBox.shrink();
                                         },
-                                      );
-                                    },
-                                  )
-                                ],
-                              ),
-                            )
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            // const Spacer(),
                           ],
                         ),
-                        // const Spacer(),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  const Divider(),
+                  TweetPostBottomRow(
+                    postController: _postController,
+                  ),
+                ],
               ),
-              const Divider(),
-              TweetPostBottomRow(
-                postController: _postController,
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

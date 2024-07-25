@@ -147,8 +147,9 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       return;
     }
-    if (widget.step == LoginStep.password && _passwordController.text.isEmpty)
+    if (widget.step == LoginStep.password && _passwordController.text.isEmpty) {
       return;
+    }
 
     setState(() {
       isMainBtnEnabled = true;
@@ -180,7 +181,8 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     try {
-      final credentials = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final credentials =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _loginController.text,
         password: _passwordController.text,
       );
