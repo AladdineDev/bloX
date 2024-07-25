@@ -113,7 +113,7 @@ class Post extends Equatable {
       reposts: reposts ?? this.reposts,
       quotes: quotes ?? this.quotes,
       bookmarks: bookmarks ?? this.bookmarks,
-      parentPostId: parentPostId ?? parentPostId,
+      parentPostId: parentPostId ?? this.parentPostId,
     );
   }
 }
