@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:blox/core/common/services/NotificationService.dart';
 import 'package:blox/core/common/widgets/input.dart';
 import 'package:blox/core/router/router.dart';
+import 'package:blox/features/auth/widgets/account_follow_tile.dart';
 import 'package:blox/features/auth/widgets/x_header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -17,8 +18,9 @@ import 'package:intl/intl.dart';
 import 'package:scroll_wheel_date_picker/scroll_wheel_date_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-enum SignupStep { form, otp, profilePicture, username, notifications }
+enum SignupStep { form, otp, profilePicture, username, notifications, followAccounts }
 
 class SignupScreen extends StatefulWidget {
   final SignupStep step;
@@ -74,6 +76,11 @@ class _SignupScreenState extends State<SignupScreen> {
         break;
       case SignupStep.notifications:
         NotificationService.instance.requestPermission();
+        setState(() {
+          isMainBtnEnabled = true;
+        });
+        break;
+      case SignupStep.followAccounts:
         break;
     }
   }
@@ -134,16 +141,16 @@ class _SignupScreenState extends State<SignupScreen> {
                                   .textTheme
                                   .bodyMedium
                                   ?.copyWith(
-                                      color: isMainBtnEnabled
-                                          ? Colors.black
-                                          : Colors.black54,
-                                      fontWeight: FontWeight.w700),
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                             ),
                           ),
                         ),
                         FilledButton(
                           onPressed: () {
-                            SignupScreenRoute(step: _getNextStep()).push(context);
+                            SignupScreenRoute(step: _getNextStep()!)
+                                .push(context);
                           },
                           child: Text('Skip {DEV}'),
                         ),
@@ -153,10 +160,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 isMainBtnEnabled ? Colors.white : Colors.grey),
                           ),
                           onPressed: _onMainBtnPressed,
-                          child: Text(
-                            widget.step == SignupStep.notifications
-                                ? 'Done'
-                                : 'Next',
+                          child: Text('Next',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -198,10 +202,15 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void _skip() {
-    SignupScreenRoute(step: _getNextStep()).push(context);
+    SignupStep? nextStep = _getNextStep();
+    if (nextStep == null) return;
+    SignupScreenRoute(step: nextStep).push(context);
   }
 
-  SignupStep _getNextStep() {
+  SignupStep? _getNextStep() {
+    if (widget.step == SignupStep.values.last) {
+      return null;
+    }
     return SignupStep.values[widget.step.index + 1];
   }
 
@@ -209,14 +218,10 @@ class _SignupScreenState extends State<SignupScreen> {
     if (widget.step == SignupStep.form) {
       final bool fieldsFilled = widget._nameController.text.isNotEmpty &&
           widget._emailController.text.isNotEmpty &&
+          _emailError == null &&
           widget._dateOfBirthController.text.isNotEmpty;
       setState(() {
         isMainBtnEnabled = fieldsFilled;
-      });
-    }
-    if (widget.step == SignupStep.username) {
-      setState(() {
-        isMainBtnEnabled = widget._usernameController.text.isNotEmpty;
       });
     }
   }
@@ -244,15 +249,11 @@ class _SignupScreenState extends State<SignupScreen> {
 
   bool _isStepSkippable() {
     switch (widget.step) {
-      case SignupStep.form:
-        return false;
-      case SignupStep.otp:
-        return false;
       case SignupStep.profilePicture:
         return true;
       case SignupStep.username:
         return true;
-      case SignupStep.notifications:
+      default:
         return false;
     }
   }
@@ -276,6 +277,16 @@ class _SignupScreenState extends State<SignupScreen> {
         email: widget._emailController.text,
         password: 'Password123!',
       );
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'displayName': widget._nameController.text,
+        'email': widget._emailController.text,
+        'dateOfBirth': _selectedDate,
+      });
+
       final user = userCredential.user;
       print('User: $user');
       if (user != null) {
@@ -284,11 +295,12 @@ class _SignupScreenState extends State<SignupScreen> {
       }
     }
 
-    if (widget.step != SignupStep.notifications) {
-      SignupScreenRoute(step: _getNextStep()).push(context);
+    SignupStep? nextStep = _getNextStep();
+    if (nextStep == null) {
+      // TODO: Navigate to tweets
       return;
     }
-    // else navigate to tweets
+    SignupScreenRoute(step: nextStep).push(context);
   }
 
   Widget _buildCurrentStep() {
@@ -303,6 +315,8 @@ class _SignupScreenState extends State<SignupScreen> {
         return _buildUsername();
       case SignupStep.notifications:
         return _buildNotifications();
+      case SignupStep.followAccounts:
+        return _buildFollowAccounts();
     }
   }
 
@@ -456,12 +470,18 @@ class _SignupScreenState extends State<SignupScreen> {
       children: [
         Text(
           'What should we call you?',
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(context)
+              .textTheme
+              .headlineLarge
+              ?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
         Text(
           'Your @username is unique. You can always change it later.',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: Colors.grey),
         ),
         const SizedBox(height: 20),
         Input(
@@ -477,7 +497,91 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Widget _buildNotifications() {
-    return const SizedBox();
+    return Expanded(
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Turn on notifications',
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "Get the most out of X by staying up to date with what's happening",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 32),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 48),
+                ),
+                onPressed: () {
+                  // TODO: Implement notification permission request
+                },
+                child: const Text('Allow notifications'),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 48),
+                ),
+                onPressed: () {
+                  _skip();
+                },
+                child: const Text('Skip for now', style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white
+                ),),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFollowAccounts() {
+    return Expanded(
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Follow 1 or more accounts',
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              "When you follow someone, you'll see their posts in your timeline. You'll also get more relevant recommendations.",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                // TODO: Replace with actual recommended users
+                itemCount: 0,
+                itemBuilder: (context, index) {
+                  // return AccountFollowTile(user: users[index]);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _validateEmail(String? value) async {
@@ -507,15 +611,17 @@ class _SignupScreenState extends State<SignupScreen> {
 
     if (result.docs.isNotEmpty) {
       setState(() {
-        _usernameError = "This username is already taken. Please try another one.";
+        _usernameError =
+            "This username is already taken. Please try another one.";
       });
       return;
     }
-    if (_usernameError != null) {
-      setState(() {
+    setState(() {
+      isMainBtnEnabled = _usernameError == null;
+      if (_usernameError != null) {
         _usernameError = null;
-      });
-    }
+      }
+    });
   }
 
   Future<void> _pickAndCropImage() async {
@@ -537,6 +643,22 @@ class _SignupScreenState extends State<SignupScreen> {
         ],
       );
       if (croppedFile != null) {
+        // TODO: Use repository pattern to run this code
+        String filePath = 'profilePictures/${DateTime.now().millisecondsSinceEpoch}_${croppedFile.path.split('/').last}';
+        Reference ref = FirebaseStorage.instance.ref().child(filePath);
+        UploadTask uploadTask = ref.putFile(File(croppedFile.path));
+        TaskSnapshot snapshot = await uploadTask;
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+
+        final user = FirebaseAuth.instance.currentUser;
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user!.uid)
+            .set({'profileImageUrl': downloadUrl});
+
+        // debug user id
+        print('User id: ${user.uid}');
+
         setState(() {
           _profileImage = XFile(croppedFile.path);
           isMainBtnEnabled = true;

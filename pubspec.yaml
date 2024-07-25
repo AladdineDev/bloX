@@ -34,6 +34,7 @@ dependencies:
   google_sign_in: 6.2.1
   dotted_border: ^2.1.0
   firebase_messaging: ^15.0.3
+  firebase_storage: ^12.1.1
 
 
 dev_dependencies:
@@ -54,6 +55,7 @@ flutter:
     - assets/images/x.png
     - assets/images/x-dark.png
     - assets/images/google.png
+    - assets/images/pp-fallback.png
 
 flutter_native_splash:
   color: "#000000"
