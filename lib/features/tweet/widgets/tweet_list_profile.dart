@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:blox/core/enums/tweet_list_tabs.dart';
@@ -9,17 +10,17 @@ import 'package:blox/core/common/widgets/spinner.dart';
 import 'package:blox/core/extensions/build_context_extension.dart';
 import 'package:blox/core/router/router.dart';
 
-class TweetList extends StatefulWidget {
-  const TweetList({super.key, required this.tweetListTab, this.postId});
+class TweetListProfile extends StatefulWidget {
+  const TweetListProfile({super.key, required this.tweetListTab, this.postId});
 
   final TweetListTab tweetListTab;
   final PostId? postId;
 
   @override
-  State<TweetList> createState() => _TweetListState();
+  State<TweetListProfile> createState() => _TweetListProfileState();
 }
 
-class _TweetListState extends State<TweetList> {
+class _TweetListProfileState extends State<TweetListProfile> {
   final _scrollController = ScrollController();
   static const _pageSize = 20;
   int _fetchLimit = _pageSize;
@@ -93,24 +94,20 @@ class _TweetListState extends State<TweetList> {
         return switch (state.status) {
           PostStatus.progressFetchingForYouPostList ||
           PostStatus.progressFetchingFollowingPostList ||
-          PostStatus.progressFetchingUserPostList =>
-            const SliverToBoxAdapter(
-              child: Center(
+          PostStatus.progressFetchingUserPostList => Center(
                 child: Spinner.medium(),
               ),
-            ),
+
           PostStatus.errorFetchingForYouPostList ||
           PostStatus.errorFetchingFollowingPostList ||
           PostStatus.errorFetchingUserPostList =>
-            SliverToBoxAdapter(
-              child: Retry(
+         Retry(
                 errorMessage: state.error.message,
                 onPressed: () => context.postBloc.add(
                   GetForYouPosts(),
                 ),
               ),
-            ),
-          _ => SliverList.separated(
+          _ => ListView.separated(
               itemCount:
                   posts.length < _fetchLimit ? posts.length : posts.length + 1,
               itemBuilder: (context, index) {

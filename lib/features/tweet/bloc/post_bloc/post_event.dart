@@ -51,3 +51,9 @@ final class GetReplyPosts extends PostEvent {
   final int limit;
   final PostId parentPostId;
 }
+
+final class GetUserPosts extends PostEvent {
+  GetUserPosts({this.limit = 20});
+
+  final int limit;
+}

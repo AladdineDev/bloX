@@ -1,4 +1,7 @@
+import 'package:blox/features/tweet/widgets/tweet_list.dart';
+import 'package:blox/core/enums/tweet_list_tabs.dart'; // Import the TweetListTab enum
 import 'package:flutter/material.dart';
+import '../../tweet/widgets/tweet_list_profile.dart';
 import '../widgets/header_section.dart';
 import '../widgets/profile_info.dart';
 
@@ -7,7 +10,6 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -25,12 +27,12 @@ class ProfileScreen extends StatelessWidget {
               ),
               SliverPersistentHeader(
                 delegate: _SliverAppBarDelegate(
-                  const TabBar(
+                  TabBar(
                     tabs: [
-                      Tab(text: 'Post'),
                       Tab(text: 'Tweets'),
                       Tab(text: 'Tweets & responses'),
                       Tab(text: 'Médias'),
+                      Tab(text: 'Likes'),
                     ],
                   ),
                 ),
@@ -38,9 +40,9 @@ class ProfileScreen extends StatelessWidget {
               ),
             ];
           },
-          body: const TabBarView(
+          body: TabBarView(
             children: [
-              Icon(Icons.person_2),
+              TweetListProfile(tweetListTab: TweetListTab.post),
               Icon(Icons.directions_car),
               Icon(Icons.directions_transit),
               Icon(Icons.directions_bike),
@@ -68,6 +70,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
       child: _tabBar,
     );
   }
+
 
   @override
   bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {

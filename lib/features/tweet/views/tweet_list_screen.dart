@@ -63,6 +63,7 @@ class _TweetListScreenState extends State<TweetListScreen> {
                       return Scrollbar(
                         controller: _scrollController,
                         child: CustomScrollView(
+                          controller: _scrollController,
                           key: PageStorageKey<String>(tab.name),
                           physics: const ClampingScrollPhysics(),
                           slivers: <Widget>[

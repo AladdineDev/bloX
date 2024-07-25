@@ -15,6 +15,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<UpdatePost>(_onUpdatePost);
     on<DeletePost>(_onDeletePost);
     on<GetFollowingPosts>(_onGetFollowingPosts);
+    on<GetUserPosts>(_onGetUserPosts);
   }
 
   final PostRepository postRepository;
@@ -115,6 +116,36 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
+  Future<void> _onGetUserPosts(
+    GetUserPosts event,
+    Emitter<PostState> emit,
+  ) async {
+    emit(state.copyWith(status: PostStatus.progressFetchingUserPostList));
+    try {
+      final postsStream = postRepository.getUserPosts(limit: event.limit);
+      return emit.forEach(postsStream, onData: (posts) {
+        return state.copyWith(
+          status: PostStatus.successFetchingUserPostList,
+          userPosts: posts,
+        );
+      });
+    } on AppException catch (e) {
+      emit(
+        state.copyWith(
+          status: PostStatus.errorFetchingUserPostList,
+          error: e,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: PostStatus.errorFetchingUserPostList,
+          error: const UnknownException(),
+        ),
+      );
+    }
+  }
+
   Future<void> _onUpdatePost(UpdatePost event, Emitter<PostState> emit) async {
     emit(state.copyWith(status: PostStatus.progressUpdatingPost));
     try {
@@ -150,7 +181,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       emit(
         state.copyWith(
           status: PostStatus.successDeletingPost,
-          post: null,
         ),
       );
     } on AppException catch (e) {

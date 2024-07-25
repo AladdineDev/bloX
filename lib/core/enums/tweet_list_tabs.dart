@@ -2,6 +2,9 @@ enum TweetListTab {
   forYou(
     title: 'For you',
   ),
+  post(
+    title: 'Post',
+  ),
   following(
     title: 'Following',
   );

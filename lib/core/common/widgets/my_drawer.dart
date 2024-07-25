@@ -44,7 +44,7 @@ class MyDrawer extends StatelessWidget {
                         const SizedBox(height: 12),
                         DrawerProfileNameAndUsername(
                           onTap: () {
-                            context.go("/profile");
+                            context.push("/profile");
                           },
                         ),
                         const SizedBox(height: 12),

@@ -39,6 +39,14 @@ class PostRepository {
     }
   }
 
+  Stream<List<Post>> getUserPosts({int limit = 20}) {
+    try {
+      return remoteDataSource.getUserPosts(limit: limit);
+    } catch (e) {
+      throw const FetchPostListException();
+    }
+  }
+
   Future<void> updatePost({required Post post}) async {
     try {
       await remoteDataSource.updatePost(post: post);

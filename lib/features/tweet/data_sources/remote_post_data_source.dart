@@ -71,4 +71,13 @@ class RemotePostDataSource extends PostDataSource {
     );
     await postDoc.delete();
   }
+
+  @override
+  Stream<List<Post>> getUserPosts({required int limit}) {
+    final postsCollection = _firestore.postsCollection();
+    Query<Post> postsQuery = postsCollection.limit(limit);
+    return postsQuery.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) => doc.data()).toList();
+    });
+  }
 }

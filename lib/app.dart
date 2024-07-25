@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
               postRepository: context.read<PostRepository>(),
             )
               ..add(GetForYouPosts())
+              ..add(GetForYouPosts())
               ..add(GetFollowingPosts(
                   followingIds: [])), //TODO: pass user followingIds
           ),
