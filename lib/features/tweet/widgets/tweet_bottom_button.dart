@@ -9,6 +9,7 @@ class TweetBottomButton extends StatelessWidget {
     this.number,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.size = 16,
+    this.iconColor,
   });
 
   final VoidCallback onTap;
@@ -16,11 +17,12 @@ class TweetBottomButton extends StatelessWidget {
   final int? number;
   final MainAxisAlignment mainAxisAlignment;
   final double size;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
     final number = this.number;
-    final color = context.colorScheme.onSurface;
+    final color = iconColor ?? context.colorScheme.onSurface;
     return InkWell(
       onTap: onTap,
       child: Padding(
