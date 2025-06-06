@@ -1,4 +1,3 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,12 +39,12 @@ class NotificationService {
   }
 
   void initNotifications() {
-    Future<void> _onBackgroundMessage(RemoteMessage message) async {
+    Future<void> onBackgroundMessage(RemoteMessage message) async {
       print(
           '[onBackgroundMessage] We received a backgroundMessage: ${message.notification?.title}');
     }
 
-    FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+    FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage remoteMessage) {
       print('[onMessage] RemoteMessage: ${remoteMessage.notification?.title}');
@@ -61,8 +60,6 @@ class NotificationService {
   }
 
   void openSettings() async {
-    await AwesomeNotifications().showNotificationConfigPage();
-
+    // await AwesomeNotifications().showNotificationConfigPage();
   }
-
 }

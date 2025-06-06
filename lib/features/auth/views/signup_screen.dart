@@ -74,7 +74,6 @@ class _SignupScreenState extends State<SignupScreen> {
         widget._usernameController.addListener(checkFieldsAndSetButtonState);
         break;
       case SignupStep.notifications:
-        NotificationService.instance.requestPermission();
         setState(() {
           isMainBtnEnabled = true;
         });
@@ -152,7 +151,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                 isMainBtnEnabled ? Colors.white : Colors.grey),
                           ),
                           onPressed: _onMainBtnPressed,
-                          child: Text('Next',
+                          child: Text(
+                            'Next',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -306,8 +306,10 @@ class _SignupScreenState extends State<SignupScreen> {
         return _buildProfilePicture();
       case SignupStep.username:
         return _buildUsername();
-      case SignupStep.notifications:
-        return _buildNotifications();
+      default:
+        return const SizedBox.shrink();
+      // case SignupStep.notifications:
+      //   return _buildNotifications();
       /*case SignupStep.followAccounts:
         return _buildFollowAccounts();*/
     }
@@ -499,16 +501,16 @@ class _SignupScreenState extends State<SignupScreen> {
             Text(
               'Turn on notifications',
               style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 8),
             Text(
               "Get the most out of X by staying up to date with what's happening",
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey,
-              ),
+                    color: Colors.grey,
+                  ),
             ),
             const SizedBox(height: 32),
             Padding(
@@ -517,7 +519,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 48),
                 ),
-                onPressed: () => NotificationService.instance.openSettings(),
+                onPressed: null,
                 child: const Text('Allow notifications'),
               ),
             ),
@@ -531,11 +533,13 @@ class _SignupScreenState extends State<SignupScreen> {
                 onPressed: () {
                   _skip();
                 },
-                child: const Text('Skip for now', style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white
-                ),),
+                child: const Text(
+                  'Skip for now',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white),
+                ),
               ),
             ),
           ],
@@ -552,12 +556,18 @@ class _SignupScreenState extends State<SignupScreen> {
           children: [
             Text(
               'Follow 1 or more accounts',
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             Text(
               "When you follow someone, you'll see their posts in your timeline. You'll also get more relevant recommendations.",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: Colors.grey),
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -565,6 +575,8 @@ class _SignupScreenState extends State<SignupScreen> {
                 // TODO: Replace with actual recommended users
                 itemCount: 0,
                 itemBuilder: (context, index) {
+                  return null;
+
                   // return AccountFollowTile(user: users[index]);
                 },
               ),
@@ -616,8 +628,8 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Future<void> _pickAndCropImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       final croppedFile = await ImageCropper().cropImage(
         sourcePath: image.path,
@@ -640,7 +652,8 @@ class _SignupScreenState extends State<SignupScreen> {
         });
 
         // TODO: Use repository pattern to run this code
-        String filePath = 'profilePictures/${DateTime.now().millisecondsSinceEpoch}_${croppedFile.path.split('/').last}';
+        String filePath =
+            'profilePictures/${DateTime.now().millisecondsSinceEpoch}_${croppedFile.path.split('/').last}';
         Reference ref = FirebaseStorage.instance.ref().child(filePath);
         UploadTask uploadTask = ref.putFile(File(croppedFile.path));
         TaskSnapshot snapshot = await uploadTask;

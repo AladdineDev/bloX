@@ -12,7 +12,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  NotificationService.instance.initNotifications();
+  // NotificationService.instance.initNotifications();
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
