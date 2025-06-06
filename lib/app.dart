@@ -50,15 +50,15 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) =>
-            AuthBloc(authRepository: context.read<AuthRepository>())
-              ..add(const AuthGetAppUser()),
+                AuthBloc(authRepository: context.read<AuthRepository>())
+                  ..add(const AuthGetAppUser()),
           ),
           BlocProvider(
             create: (context) => AppUserBloc(
-              appUserRepository: context.read<AppUserRepository>())
-              ..add(GetOneAppUser(context.read<AuthBloc>().state.appUser!.id!),
-
-            ),
+                appUserRepository: context.read<AppUserRepository>())
+              ..add(
+                GetOneAppUser(context.read<AuthBloc>().state.appUser!.id!),
+              ),
           ),
           BlocProvider(
             create: (context) =>
