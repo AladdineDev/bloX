@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '284801421562',
     projectId: 'esgi-tweet-4339f',
     storageBucket: 'esgi-tweet-4339f.appspot.com',
-    iosClientId: '284801421562-e85gp91bf08i2dfchu8tmnlcmf3364vf.apps.googleusercontent.com',
+    iosClientId:
+        '284801421562-e85gp91bf08i2dfchu8tmnlcmf3364vf.apps.googleusercontent.com',
     iosBundleId: 'com.example.blox',
   );
 }
