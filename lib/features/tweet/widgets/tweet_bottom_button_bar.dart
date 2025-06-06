@@ -20,7 +20,7 @@ class TweetBottomButtonsBar extends StatelessWidget {
     final postRepostsNumber = post.reposts?.length ?? 0;
     final postLikesNumber = post.likes?.length ?? 0;
     final postViewsNumber = post.views?.length ?? 0;
-    final appUserId = context.appUserBloc.state.appUser!.id!;
+    final appUserId = context.appUserBloc.state.appUser?.id;
     final postLikes = post.likes ?? [];
     bool isLikedByUser = postLikes.contains(appUserId);
 
@@ -61,13 +61,15 @@ class TweetBottomButtonsBar extends StatelessWidget {
                             ),
                           );
                     } else {
-                      context.read<PostBloc>().add(
-                            UpdatePost(
-                              post.copyWith(
-                                likes: postLikes..add(appUserId),
+                      if (appUserId != null) {
+                        context.read<PostBloc>().add(
+                              UpdatePost(
+                                post.copyWith(
+                                  likes: postLikes..add(appUserId),
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                      }
                     }
                   },
                   icon: isLikedByUser

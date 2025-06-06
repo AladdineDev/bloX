@@ -25,6 +25,7 @@ class RemoteAuthDataSource extends AuthDataSource {
 
   @override
   Future<void> signInWithGoogle() async {
+    print("appUser1:");
     final googleUser = await _googleSignIn.signIn();
     final googleAuth = await googleUser!.authentication;
     final credential = GoogleAuthProvider.credential(

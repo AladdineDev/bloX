@@ -90,10 +90,12 @@ class _TweetListState extends State<TweetList> {
           PostStatus.errorFetchingForYouPostList ||
           PostStatus.errorFetchingFollowingPostList =>
             SliverToBoxAdapter(
-              child: Retry(
-                errorMessage: state.error.message,
-                onPressed: () => context.postBloc.add(
-                  GetForYouPosts(),
+              child: Center(
+                child: Retry(
+                  errorMessage: state.error.message,
+                  onPressed: () => context.postBloc.add(
+                    GetForYouPosts(),
+                  ),
                 ),
               ),
             ),

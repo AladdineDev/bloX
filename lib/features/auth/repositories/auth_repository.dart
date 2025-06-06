@@ -16,7 +16,7 @@ class AuthRepository {
       await remoteAuthDataSource.signInWithGoogle();
     } catch (e) {
       //TODO: handle exception
-      debugPrint(e.toString());
+      debugPrint("appUser3: ${e.toString()}");
       rethrow;
     }
   }

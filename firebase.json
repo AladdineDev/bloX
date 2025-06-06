@@ -1,1 +1,35 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"esgi-tweet-4339f","appId":"1:284801421562:android:070306f4d916f870f87943","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"esgi-tweet-4339f","appId":"1:284801421562:ios:d57a4de0a08c0e3af87943","uploadDebugSymbols":true,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"esgi-tweet-4339f","configurations":{"ios":"1:284801421562:ios:d57a4de0a08c0e3af87943"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "esgi-tweet-4339f",
+          "appId": "1:284801421562:android:070306f4d916f870f87943",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "esgi-tweet-4339f",
+          "appId": "1:284801421562:ios:d57a4de0a08c0e3af87943",
+          "uploadDebugSymbols": true,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "esgi-tweet-4339f",
+          "configurations": {
+            "ios": "1:284801421562:ios:d57a4de0a08c0e3af87943"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "database": "(default)",
+    "location": "eur3",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}
