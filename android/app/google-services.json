@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "284801421562",
+    "project_id": "esgi-tweet-4339f",
+    "storage_bucket": "esgi-tweet-4339f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284801421562:android:a81356558b8f30f0f87943",
+        "android_client_info": {
+          "package_name": "com.example.bloc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284801421562-f5jfse043o0nte7n5r0r1nha01a3b6di.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzfE0ZUNyykhbvGAmSyP5rbXSjAcElWps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284801421562-f5jfse043o0nte7n5r0r1nha01a3b6di.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "284801421562-e85gp91bf08i2dfchu8tmnlcmf3364vf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.blox"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284801421562:android:070306f4d916f870f87943",
+        "android_client_info": {
+          "package_name": "com.example.blox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284801421562-oa39l4ct2mv432krs5vvpuh2a5hg8499.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.blox",
+            "certificate_hash": "db7424ef66e4dea588aaf2c39cb1deafa0f7770e"
+          }
+        },
+        {
+          "client_id": "284801421562-f5jfse043o0nte7n5r0r1nha01a3b6di.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzfE0ZUNyykhbvGAmSyP5rbXSjAcElWps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284801421562-f5jfse043o0nte7n5r0r1nha01a3b6di.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "284801421562-e85gp91bf08i2dfchu8tmnlcmf3364vf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.blox"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
